@@ -1,0 +1,11 @@
+C:\Users\bmonteiro\source\repos\COSIG_RayTracer\COSIG_RayTracer\bin\Debug\COSIG_RayTracer.exe.config
+C:\Users\bmonteiro\source\repos\COSIG_RayTracer\COSIG_RayTracer\bin\Debug\COSIG_RayTracer.exe
+C:\Users\bmonteiro\source\repos\COSIG_RayTracer\COSIG_RayTracer\bin\Debug\COSIG_RayTracer.pdb
+C:\Users\bmonteiro\source\repos\COSIG_RayTracer\COSIG_RayTracer\obj\Debug\COSIG_RayTracer.csproj.AssemblyReference.cache
+C:\Users\bmonteiro\source\repos\COSIG_RayTracer\COSIG_RayTracer\obj\Debug\COSIG_RayTracer.csproj.SuggestedBindingRedirects.cache
+C:\Users\bmonteiro\source\repos\COSIG_RayTracer\COSIG_RayTracer\obj\Debug\COSIG_RayTracer.Form1.resources
+C:\Users\bmonteiro\source\repos\COSIG_RayTracer\COSIG_RayTracer\obj\Debug\COSIG_RayTracer.Properties.Resources.resources
+C:\Users\bmonteiro\source\repos\COSIG_RayTracer\COSIG_RayTracer\obj\Debug\COSIG_RayTracer.csproj.GenerateResource.cache
+C:\Users\bmonteiro\source\repos\COSIG_RayTracer\COSIG_RayTracer\obj\Debug\COSIG_RayTracer.csproj.CoreCompileInputs.cache
+C:\Users\bmonteiro\source\repos\COSIG_RayTracer\COSIG_RayTracer\obj\Debug\COSIG_RayTracer.exe
+C:\Users\bmonteiro\source\repos\COSIG_RayTracer\COSIG_RayTracer\obj\Debug\COSIG_RayTracer.pdb
