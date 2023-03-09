@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,8 +53,21 @@
     <Compile Include="2023cosigraytracer.Designer.cs">
       <DependentUpon>2023cosigraytracer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Objects\Box.cs" />
+    <Compile Include="Objects\Camera.cs" />
+    <Compile Include="Objects\Colour3.cs" />
+    <Compile Include="Objects\Image.cs" />
+    <Compile Include="Objects\Light.cs" />
+    <Compile Include="Objects\Material.cs" />
+    <Compile Include="Objects\Sphere.cs" />
+    <Compile Include="Objects\Transformation.cs" />
+    <Compile Include="Objects\Triangle.cs" />
+    <Compile Include="Objects\Triangles.cs" />
+    <Compile Include="Objects\Vector3SelFMade.cs" />
+    <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tests.cs" />
     <EmbeddedResource Include="2023cosigraytracer.resx">
       <DependentUpon>2023cosigraytracer.cs</DependentUpon>
     </EmbeddedResource>
