@@ -1,0 +1,33 @@
+# Visual Studio files
+*.sln
+*.suo
+*.user
+*.vssscc
+*.vspscc
+*/bin/
+*/obj/
+
+
+# Resharper files
+_ReSharper*/
+
+# NuGet packages
+packages/
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+build/
+[Bb]in/
+[Oo]bj/
+
+# MSTest test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# Other files
+[Tt]humbs.db
+*.DS_Store
+
