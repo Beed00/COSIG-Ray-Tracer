@@ -1,6 +1,6 @@
 ﻿namespace COSIG_RayTracer
 {
-    partial class Form1
+    partial class RayTracerWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -132,7 +132,7 @@
             this.elapsedTimeLabel.Text = "Elapsed Time: ";
             this.elapsedTimeLabel.Click += new System.EventHandler(this.label1_Click);
             // 
-            // Form1
+            // RayTracerWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -147,7 +147,7 @@
             this.Controls.Add(this.startButton);
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.loadButton);
-            this.Name = "Form1";
+            this.Name = "RayTracerWindow";
             this.Text = "2023 COSIG RayTracer";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

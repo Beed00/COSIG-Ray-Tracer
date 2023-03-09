@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace COSIG_RayTracer
 {
-    public partial class Form1 : Form
+    public partial class RayTracerWindow : Form
     {
-        public Form1()
+        public RayTracerWindow()
         {
             InitializeComponent();
         }
