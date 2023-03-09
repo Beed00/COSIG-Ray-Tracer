@@ -39,6 +39,7 @@
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.elapsedTimeLabel = new System.Windows.Forms.Label();
             this.elapsedTimeTimer = new System.Windows.Forms.Timer(this.components);
+            this.tickLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.imageWindow)).BeginInit();
             this.SuspendLayout();
             // 
@@ -138,12 +139,27 @@
             this.elapsedTimeLabel.Text = "Elapsed Time: ";
             this.elapsedTimeLabel.Click += new System.EventHandler(this.label1_Click);
             // 
+            // elapsedTimeTimer
+            // 
+            this.elapsedTimeTimer.Tick += new System.EventHandler(this.elapsedTimeTimer_Tick);
+            // 
+            // tickLabel
+            // 
+            this.tickLabel.AutoSize = true;
+            this.tickLabel.Location = new System.Drawing.Point(661, 12);
+            this.tickLabel.Name = "tickLabel";
+            this.tickLabel.Size = new System.Drawing.Size(0, 16);
+            this.tickLabel.TabIndex = 10;
+            this.tickLabel.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.tickLabel.Click += new System.EventHandler(this.tickLabel_Click);
+            // 
             // RayTracerWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SeaShell;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.tickLabel);
             this.Controls.Add(this.elapsedTimeLabel);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.imageWindow);
@@ -174,6 +190,7 @@
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.Label elapsedTimeLabel;
         private System.Windows.Forms.Timer elapsedTimeTimer;
+        private System.Windows.Forms.Label tickLabel;
     }
 }
 

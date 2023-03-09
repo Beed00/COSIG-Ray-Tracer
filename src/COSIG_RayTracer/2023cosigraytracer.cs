@@ -13,9 +13,11 @@ namespace COSIG_RayTracer
 {
     public partial class RayTracerWindow : Form
     {
+        private int timer = 0;
         public RayTracerWindow()
         {
             InitializeComponent();
+            elapsedTimeTimer.Interval = (1000);
         }
 
         private void RayTracerWindow_Load(object sender, EventArgs e)
@@ -40,6 +42,9 @@ namespace COSIG_RayTracer
                 {
                 }
             }
+
+            elapsedTimeTimer.Start();
+
             Console.WriteLine("FileSize: " + size);
             Console.WriteLine("Result: " + result);
             Console.WriteLine("FilePath: " + openFileDialog.FileName);
@@ -52,7 +57,8 @@ namespace COSIG_RayTracer
 
         private void elapsedTimeTimer_Tick(object sender, EventArgs e)
         {
-
+            timer++;
+            tickLabel.Text = timer.ToString();
         }
 
         private void startButton_Click(object sender, EventArgs e)
@@ -81,6 +87,11 @@ namespace COSIG_RayTracer
         }
 
         private void recursionDepth1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tickLabel_Click(object sender, EventArgs e)
         {
 
         }
