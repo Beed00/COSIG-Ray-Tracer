@@ -17,12 +17,12 @@ namespace COSIG_RayTracer
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void RayTracerWindow_Load(object sender, EventArgs e)
         {
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void loadButton_Click(object sender, EventArgs e)
         {
 
         }
@@ -33,6 +33,16 @@ namespace COSIG_RayTracer
         }
 
         private void elapsedTimeTimer_Tick(object sender, EventArgs e)
+        {
+
+        }
+
+        private void startButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void exitButton_Click(object sender, EventArgs e)
         {
 
         }
