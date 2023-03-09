@@ -35,11 +35,11 @@
             this.exitButton = new System.Windows.Forms.Button();
             this.recursionDepthSlider = new System.Windows.Forms.DomainUpDown();
             this.recursionDepth1 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.imageWindow = new System.Windows.Forms.PictureBox();
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.elapsedTimeLabel = new System.Windows.Forms.Label();
             this.elapsedTimeTimer = new System.Windows.Forms.Timer(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imageWindow)).BeginInit();
             this.SuspendLayout();
             // 
             // loadButton
@@ -98,6 +98,7 @@
             this.recursionDepthSlider.Name = "recursionDepthSlider";
             this.recursionDepthSlider.Size = new System.Drawing.Size(51, 22);
             this.recursionDepthSlider.TabIndex = 4;
+            this.recursionDepthSlider.SelectedItemChanged += new System.EventHandler(this.recursionDepthSlider_SelectedItemChanged);
             // 
             // recursionDepth1
             // 
@@ -107,14 +108,16 @@
             this.recursionDepth1.Size = new System.Drawing.Size(107, 16);
             this.recursionDepth1.TabIndex = 5;
             this.recursionDepth1.Text = "Recursion Depth";
+            this.recursionDepth1.Click += new System.EventHandler(this.recursionDepth1_Click);
             // 
-            // pictureBox1
+            // imageWindow
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(50, 41);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(700, 250);
-            this.pictureBox1.TabIndex = 7;
-            this.pictureBox1.TabStop = false;
+            this.imageWindow.Location = new System.Drawing.Point(50, 41);
+            this.imageWindow.Name = "imageWindow";
+            this.imageWindow.Size = new System.Drawing.Size(700, 250);
+            this.imageWindow.TabIndex = 7;
+            this.imageWindow.TabStop = false;
+            this.imageWindow.Click += new System.EventHandler(this.imageWindow_Click);
             // 
             // progressBar
             // 
@@ -123,6 +126,7 @@
             this.progressBar.Size = new System.Drawing.Size(150, 23);
             this.progressBar.TabIndex = 8;
             this.progressBar.Value = 70;
+            this.progressBar.Click += new System.EventHandler(this.progressBar_Click);
             // 
             // elapsedTimeLabel
             // 
@@ -142,7 +146,7 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.elapsedTimeLabel);
             this.Controls.Add(this.progressBar);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.imageWindow);
             this.Controls.Add(this.recursionDepth1);
             this.Controls.Add(this.recursionDepthSlider);
             this.Controls.Add(this.exitButton);
@@ -152,7 +156,7 @@
             this.Name = "RayTracerWindow";
             this.Text = "2023 COSIG RayTracer";
             this.Load += new System.EventHandler(this.RayTracerWindow_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imageWindow)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -166,7 +170,7 @@
         private System.Windows.Forms.Button exitButton;
         private System.Windows.Forms.DomainUpDown recursionDepthSlider;
         private System.Windows.Forms.Label recursionDepth1;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox imageWindow;
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.Label elapsedTimeLabel;
         private System.Windows.Forms.Timer elapsedTimeTimer;

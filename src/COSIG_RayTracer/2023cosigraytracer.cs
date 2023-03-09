@@ -46,5 +46,25 @@ namespace COSIG_RayTracer
         {
 
         }
+
+        private void progressBar_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void imageWindow_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void recursionDepthSlider_SelectedItemChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void recursionDepth1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
