@@ -15,6 +15,7 @@ namespace COSIG_RayTracer
     public partial class RayTracerWindow : Form
     {
         private int timer = 0;
+        private int loadLevel = 0;
         public RayTracerWindow()
         {
             InitializeComponent();
@@ -69,8 +70,19 @@ namespace COSIG_RayTracer
 
         private void elapsedTimeTimer_Tick(object sender, EventArgs e)
         {
-            timer++;
-            tickLabel.Text = timer.ToString();
+            if (loadLevel < 100)
+            {
+                timer++;
+                tickLabel.Text = timer.ToString();
+
+                loadLevel++;
+                progressBar.Value = loadLevel;
+            } else
+            {
+                elapsedTimeTimer.Stop();
+                timer = 0;
+                loadLevel = 0;
+            }
         }
 
         private void startButton_Click(object sender, EventArgs e)
