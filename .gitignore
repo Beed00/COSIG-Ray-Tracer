@@ -31,3 +31,4 @@ build/
 [Tt]humbs.db
 *.DS_Store
 
+src/.vs/COSIG_RayTracer/FileContentIndex/
