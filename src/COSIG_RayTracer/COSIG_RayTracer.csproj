@@ -56,14 +56,15 @@
     <Compile Include="Objects\Box.cs" />
     <Compile Include="Objects\Camera.cs" />
     <Compile Include="Objects\Colour3.cs" />
+    <Compile Include="Objects\Hit.cs" />
     <Compile Include="Objects\Image.cs" />
     <Compile Include="Objects\Light.cs" />
     <Compile Include="Objects\Material.cs" />
+    <Compile Include="Objects\Ray.cs" />
     <Compile Include="Objects\Sphere.cs" />
     <Compile Include="Objects\Transformation.cs" />
     <Compile Include="Objects\Triangle.cs" />
     <Compile Include="Objects\Triangles.cs" />
-    <Compile Include="Objects\Vector3SelFMade.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

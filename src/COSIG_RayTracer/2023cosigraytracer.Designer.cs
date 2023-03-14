@@ -1,4 +1,6 @@
-﻿namespace COSIG_RayTracer
+﻿using System.Windows.Forms;
+
+namespace COSIG_RayTracer
 {
     partial class RayTracerWindow
     {
@@ -40,14 +42,17 @@
             this.elapsedTimeLabel = new System.Windows.Forms.Label();
             this.elapsedTimeTimer = new System.Windows.Forms.Timer(this.components);
             this.tickLabel = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.imageWindow)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // loadButton
             // 
-            this.loadButton.Location = new System.Drawing.Point(50, 349);
+            this.loadButton.Location = new System.Drawing.Point(100, 676);
+            this.loadButton.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.loadButton.Name = "loadButton";
-            this.loadButton.Size = new System.Drawing.Size(101, 23);
+            this.loadButton.Size = new System.Drawing.Size(202, 45);
             this.loadButton.TabIndex = 0;
             this.loadButton.Text = "Load";
             this.loadButton.UseVisualStyleBackColor = true;
@@ -55,18 +60,20 @@
             // 
             // saveButton
             // 
-            this.saveButton.Location = new System.Drawing.Point(50, 399);
+            this.saveButton.Location = new System.Drawing.Point(100, 773);
+            this.saveButton.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(101, 23);
+            this.saveButton.Size = new System.Drawing.Size(202, 45);
             this.saveButton.TabIndex = 1;
             this.saveButton.Text = "Save Image";
             this.saveButton.UseVisualStyleBackColor = true;
             // 
             // startButton
             // 
-            this.startButton.Location = new System.Drawing.Point(649, 349);
+            this.startButton.Location = new System.Drawing.Point(1298, 676);
+            this.startButton.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.startButton.Name = "startButton";
-            this.startButton.Size = new System.Drawing.Size(101, 23);
+            this.startButton.Size = new System.Drawing.Size(202, 45);
             this.startButton.TabIndex = 2;
             this.startButton.Text = "Start";
             this.startButton.UseVisualStyleBackColor = true;
@@ -74,9 +81,10 @@
             // 
             // exitButton
             // 
-            this.exitButton.Location = new System.Drawing.Point(649, 399);
+            this.exitButton.Location = new System.Drawing.Point(1298, 773);
+            this.exitButton.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.exitButton.Name = "exitButton";
-            this.exitButton.Size = new System.Drawing.Size(101, 23);
+            this.exitButton.Size = new System.Drawing.Size(202, 45);
             this.exitButton.TabIndex = 3;
             this.exitButton.Text = "Exit";
             this.exitButton.UseVisualStyleBackColor = true;
@@ -95,36 +103,40 @@
             this.recursionDepthSlider.Items.Add("2");
             this.recursionDepthSlider.Items.Add("1");
             this.recursionDepthSlider.Items.Add("0");
-            this.recursionDepthSlider.Location = new System.Drawing.Point(426, 350);
+            this.recursionDepthSlider.Location = new System.Drawing.Point(852, 678);
+            this.recursionDepthSlider.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.recursionDepthSlider.Name = "recursionDepthSlider";
-            this.recursionDepthSlider.Size = new System.Drawing.Size(51, 22);
+            this.recursionDepthSlider.Size = new System.Drawing.Size(102, 38);
             this.recursionDepthSlider.TabIndex = 4;
             this.recursionDepthSlider.SelectedItemChanged += new System.EventHandler(this.recursionDepthSlider_SelectedItemChanged);
             // 
             // recursionDepth1
             // 
             this.recursionDepth1.AutoSize = true;
-            this.recursionDepth1.Location = new System.Drawing.Point(313, 352);
+            this.recursionDepth1.Location = new System.Drawing.Point(626, 682);
+            this.recursionDepth1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.recursionDepth1.Name = "recursionDepth1";
-            this.recursionDepth1.Size = new System.Drawing.Size(107, 16);
+            this.recursionDepth1.Size = new System.Drawing.Size(225, 32);
             this.recursionDepth1.TabIndex = 5;
             this.recursionDepth1.Text = "Recursion Depth";
             this.recursionDepth1.Click += new System.EventHandler(this.recursionDepth1_Click);
             // 
             // imageWindow
             // 
-            this.imageWindow.Location = new System.Drawing.Point(50, 41);
+            this.imageWindow.Location = new System.Drawing.Point(100, 79);
+            this.imageWindow.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.imageWindow.Name = "imageWindow";
-            this.imageWindow.Size = new System.Drawing.Size(700, 250);
+            this.imageWindow.Size = new System.Drawing.Size(1400, 484);
             this.imageWindow.TabIndex = 7;
             this.imageWindow.TabStop = false;
             this.imageWindow.Click += new System.EventHandler(this.imageWindow_Click);
             // 
             // progressBar
             // 
-            this.progressBar.Location = new System.Drawing.Point(321, 153);
+            this.progressBar.Location = new System.Drawing.Point(642, 296);
+            this.progressBar.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(150, 23);
+            this.progressBar.Size = new System.Drawing.Size(300, 45);
             this.progressBar.TabIndex = 8;
             this.progressBar.Value = 70;
             this.progressBar.Click += new System.EventHandler(this.progressBar_Click);
@@ -132,9 +144,10 @@
             // elapsedTimeLabel
             // 
             this.elapsedTimeLabel.AutoSize = true;
-            this.elapsedTimeLabel.Location = new System.Drawing.Point(569, 12);
+            this.elapsedTimeLabel.Location = new System.Drawing.Point(1138, 23);
+            this.elapsedTimeLabel.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.elapsedTimeLabel.Name = "elapsedTimeLabel";
-            this.elapsedTimeLabel.Size = new System.Drawing.Size(98, 16);
+            this.elapsedTimeLabel.Size = new System.Drawing.Size(203, 32);
             this.elapsedTimeLabel.TabIndex = 9;
             this.elapsedTimeLabel.Text = "Elapsed Time: ";
             this.elapsedTimeLabel.Click += new System.EventHandler(this.label1_Click);
@@ -146,19 +159,30 @@
             // tickLabel
             // 
             this.tickLabel.AutoSize = true;
-            this.tickLabel.Location = new System.Drawing.Point(661, 12);
+            this.tickLabel.Location = new System.Drawing.Point(1322, 23);
+            this.tickLabel.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.tickLabel.Name = "tickLabel";
-            this.tickLabel.Size = new System.Drawing.Size(0, 16);
+            this.tickLabel.Size = new System.Drawing.Size(0, 32);
             this.tickLabel.TabIndex = 10;
             this.tickLabel.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.tickLabel.Click += new System.EventHandler(this.tickLabel_Click);
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Location = new System.Drawing.Point(115, 95);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(477, 423);
+            this.pictureBox1.TabIndex = 11;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Paint += new PaintEventHandler(this.pictureBox1_Paint);
+            // 
             // RayTracerWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SeaShell;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1600, 872);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.tickLabel);
             this.Controls.Add(this.elapsedTimeLabel);
             this.Controls.Add(this.progressBar);
@@ -169,10 +193,12 @@
             this.Controls.Add(this.startButton);
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.loadButton);
+            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.Name = "RayTracerWindow";
             this.Text = "2023 COSIG RayTracer";
             this.Load += new System.EventHandler(this.RayTracerWindow_Load);
             ((System.ComponentModel.ISupportInitialize)(this.imageWindow)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -191,6 +217,7 @@
         private System.Windows.Forms.Label elapsedTimeLabel;
         private System.Windows.Forms.Timer elapsedTimeTimer;
         private System.Windows.Forms.Label tickLabel;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 
