@@ -80,7 +80,7 @@ namespace COSIG_RayTracer
                 timer++;
                 tickLabel.Text = timer.ToString();
 
-                loadLevel++;
+                loadLevel+= 10;
                 progressBar.Value = loadLevel;
             }
             else
@@ -88,6 +88,7 @@ namespace COSIG_RayTracer
                 elapsedTimeTimer.Stop();
                 timer = 0;
                 loadLevel = 0;
+                progressBar.Value = loadLevel;
             }
         }
 
