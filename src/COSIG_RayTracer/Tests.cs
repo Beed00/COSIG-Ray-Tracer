@@ -11,7 +11,7 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_
     internal class Tests
     {
         public static void ParserTest(int imageCount, List<Transformation> transformations, Camera camera,
-                                        List<Light> lights, List<Material> materials, List<Triangles> triangles,
+                                        List<Light> lights, List<Material> materials, List<TriangleMesh> triangles,
                                         List<Sphere> spheres, List<Box> boxs)
         {
             // Listagem de alguns atributos do ficheiro descritivo da cena 3D
@@ -28,7 +28,7 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_
 
             sb.Append(String.Format("{0,-20} {1,12} {2,20} {3,20} {4,20}\n", "Material", materials.Count, "-", "-", "-"));
 
-            foreach (Triangles str in triangles)
+            foreach (TriangleMesh str in triangles)
             {
                 aux = "";
                 foreach (Triangle tri in str.getTriangles())
@@ -62,7 +62,7 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_
             Console.WriteLine(sb);
         }
 
-        internal static void NormalsTest(List<Triangles> triangles)
+        internal static void NormalsTest(List<TriangleMesh> triangles)
         {
             var sb = new System.Text.StringBuilder();
             sb.Append(String.Format("\n\n{0,-20} {1,12} {2,20} {3,20}\n\n", "Objeto", "Componente X", "Componente Y", "Componente Z"));

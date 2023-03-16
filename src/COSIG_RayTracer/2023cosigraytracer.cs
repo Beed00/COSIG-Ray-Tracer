@@ -17,6 +17,8 @@ namespace COSIG_RayTracer
 {
     public partial class RayTracerWindow : Form
     {
+        private bool isDebuggingRun = false;
+
         private Parser parsedContent = new Parser();
         private bool paintReady = false;
 
@@ -61,11 +63,14 @@ namespace COSIG_RayTracer
             string filePath = openFileDialog.FileName;
             parsedContent.LoadFile(filePath);
 
-            Tests.ParserTest(parsedContent.imageCount, parsedContent.Transformations, parsedContent.Camera,
-                            parsedContent.Lights, parsedContent.Materials, parsedContent.Triangles,
-                            parsedContent.Spheres, parsedContent.Boxs);
+            if (isDebuggingRun)
+            {
+                Tests.ParserTest(parsedContent.imageCount, parsedContent.Transformations, parsedContent.Camera,
+                            parsedContent.Lights, parsedContent.Materials, parsedContent.TriangleMeshes,
+                            parsedContent.Spheres, parsedContent.Boxes);
 
-            Tests.NormalsTest(parsedContent.Triangles);
+                Tests.NormalsTest(parsedContent.TriangleMeshes);
+            }
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -80,7 +85,7 @@ namespace COSIG_RayTracer
                 timer++;
                 tickLabel.Text = timer.ToString();
 
-                loadLevel+= 10;
+                loadLevel += 10;
                 progressBar.Value = loadLevel;
             }
             else
@@ -102,7 +107,7 @@ namespace COSIG_RayTracer
 
             double pixelDimension = height / parsedContent.Image.Res_vertical;
 
-            parsedContent.Image.InitializePixels();           
+            parsedContent.Image.InitializePixels();
 
 
             /* comecem por calcular o ponto origin de onde irão partir todos os raios primários (o ponto 
@@ -146,7 +151,7 @@ namespace COSIG_RayTracer
 
                     Ray ray = new Ray(origin, direction_normalized);
 
-                    if (j < 10 && i < 10)
+                    if (isDebuggingRun && j < 10 && i < 10)
                     {
                         Console.WriteLine("Linha " + j + ", Coluna " + i
                             + ", X= " + ray.Direction_Normalized.X
@@ -158,7 +163,7 @@ namespace COSIG_RayTracer
                     acompanhar recursivamente o percurso do referido raio; quando regressar, esta
                     função deverá retornar uma cor color */
 
-                    Colour3 colour = traceRay(ray, max_recursivity); /* em que ray designa o raio a ser acompanhado e rec um 
+                    Colour3 colour = TraceRay(ray, max_recursivity); /* em que ray designa o raio a ser acompanhado e rec um 
                     inteiro que contém o nível máximo de recursividade
 
 /* (continua)
@@ -196,11 +201,26 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
             pictureBox1.Invalidate();
         }
 
-        Colour3 traceRay(Ray ray, int max_recursion)
+        private Colour3 TraceRay(Ray ray, int max_recursion)
         {
             //(255.0 / 255.0), (182.0 / 255.0), (193.0 / 255.0)
-            return new Colour3(0.4, 0.5, 0.6);
+            //return new Colour3(0.4, 0.5, 0.6);
+
+            Hit hit = new Hit
+            {
+                Tmin = double.MaxValue // usem um valor muito elevado. Por exemplo, hit.tmin = 1.0E12;
+            };
+            foreach (Object3D obj in parsedContent.GetAllObjects3D()) // ciclo para percorrer todos os objectos da cena
+            {                
+                obj.Intersect(ray, hit);
+            }
+            if (hit.Found)
+                return hit.Material.Colour; /* se houver intersecção, retorna a cor do material 
+                constituinte do objecto intersectado mais próximo da origem do raio */
+            else
+                return parsedContent.Image.BackgroundColour; // caso contrário, retorna a cor de fundo
         }
+
 
         private void exitButton_Click(object sender, EventArgs e)
         {
@@ -237,15 +257,18 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
             if (paintReady)
             {
                 Graphics g = e.Graphics;
+                float hStart = (pictureBox1.Width - parsedContent.Image.Res_horizontal) / 2;
+                float vStart = (pictureBox1.Height - parsedContent.Image.Res_vertical) / 2;
                 for (int i = 0; i < parsedContent.Image.Res_horizontal; i++)
                 {
                     for (int j = 0; j < parsedContent.Image.Res_vertical; j++)
                     {
                         Color c = Color.FromArgb(parsedContent.Image.Pixels_Red[i, j], parsedContent.Image.Pixels_Green[i, j], parsedContent.Image.Pixels_Blue[i, j]);
                         SolidBrush brush = new SolidBrush(c);
-                        g.FillRectangle(brush, i, j, 1, 1);
+                        g.FillRectangle(brush, hStart + i, vStart + j, 1, 1);
                     }
                 }
+
                 Console.WriteLine("All done");
             }
         }

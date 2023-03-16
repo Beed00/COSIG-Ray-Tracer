@@ -49,8 +49,9 @@ namespace COSIG_RayTracer
             // 
             // loadButton
             // 
+            this.loadButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.loadButton.Location = new System.Drawing.Point(100, 676);
-            this.loadButton.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.loadButton.Margin = new System.Windows.Forms.Padding(6);
             this.loadButton.Name = "loadButton";
             this.loadButton.Size = new System.Drawing.Size(202, 45);
             this.loadButton.TabIndex = 0;
@@ -60,8 +61,9 @@ namespace COSIG_RayTracer
             // 
             // saveButton
             // 
+            this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.saveButton.Location = new System.Drawing.Point(100, 773);
-            this.saveButton.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.saveButton.Margin = new System.Windows.Forms.Padding(6);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(202, 45);
             this.saveButton.TabIndex = 1;
@@ -70,8 +72,9 @@ namespace COSIG_RayTracer
             // 
             // startButton
             // 
+            this.startButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.startButton.Location = new System.Drawing.Point(1298, 676);
-            this.startButton.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.startButton.Margin = new System.Windows.Forms.Padding(6);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(202, 45);
             this.startButton.TabIndex = 2;
@@ -81,8 +84,9 @@ namespace COSIG_RayTracer
             // 
             // exitButton
             // 
+            this.exitButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.exitButton.Location = new System.Drawing.Point(1298, 773);
-            this.exitButton.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.exitButton.Margin = new System.Windows.Forms.Padding(6);
             this.exitButton.Name = "exitButton";
             this.exitButton.Size = new System.Drawing.Size(202, 45);
             this.exitButton.TabIndex = 3;
@@ -92,6 +96,7 @@ namespace COSIG_RayTracer
             // 
             // recursionDepthSlider
             // 
+            this.recursionDepthSlider.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.recursionDepthSlider.Items.Add("10");
             this.recursionDepthSlider.Items.Add("9");
             this.recursionDepthSlider.Items.Add("8");
@@ -104,7 +109,7 @@ namespace COSIG_RayTracer
             this.recursionDepthSlider.Items.Add("1");
             this.recursionDepthSlider.Items.Add("0");
             this.recursionDepthSlider.Location = new System.Drawing.Point(852, 678);
-            this.recursionDepthSlider.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.recursionDepthSlider.Margin = new System.Windows.Forms.Padding(6);
             this.recursionDepthSlider.Name = "recursionDepthSlider";
             this.recursionDepthSlider.Size = new System.Drawing.Size(102, 38);
             this.recursionDepthSlider.TabIndex = 4;
@@ -112,6 +117,7 @@ namespace COSIG_RayTracer
             // 
             // recursionDepth1
             // 
+            this.recursionDepth1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.recursionDepth1.AutoSize = true;
             this.recursionDepth1.Location = new System.Drawing.Point(626, 682);
             this.recursionDepth1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
@@ -123,18 +129,19 @@ namespace COSIG_RayTracer
             // 
             // imageWindow
             // 
-            this.imageWindow.Location = new System.Drawing.Point(100, 79);
-            this.imageWindow.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.imageWindow.Location = new System.Drawing.Point(15, 15);
+            this.imageWindow.Margin = new System.Windows.Forms.Padding(6);
             this.imageWindow.Name = "imageWindow";
-            this.imageWindow.Size = new System.Drawing.Size(1400, 484);
+            this.imageWindow.Size = new System.Drawing.Size(83, 54);
             this.imageWindow.TabIndex = 7;
             this.imageWindow.TabStop = false;
             this.imageWindow.Click += new System.EventHandler(this.imageWindow_Click);
             // 
             // progressBar
             // 
-            this.progressBar.Location = new System.Drawing.Point(642, 296);
-            this.progressBar.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.progressBar.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.progressBar.Location = new System.Drawing.Point(641, 763);
+            this.progressBar.Margin = new System.Windows.Forms.Padding(6);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(300, 45);
             this.progressBar.TabIndex = 8;
@@ -143,6 +150,7 @@ namespace COSIG_RayTracer
             // 
             // elapsedTimeLabel
             // 
+            this.elapsedTimeLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.elapsedTimeLabel.AutoSize = true;
             this.elapsedTimeLabel.Location = new System.Drawing.Point(1138, 23);
             this.elapsedTimeLabel.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
@@ -158,6 +166,7 @@ namespace COSIG_RayTracer
             // 
             // tickLabel
             // 
+            this.tickLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.tickLabel.AutoSize = true;
             this.tickLabel.Location = new System.Drawing.Point(1322, 23);
             this.tickLabel.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
@@ -169,19 +178,23 @@ namespace COSIG_RayTracer
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(115, 95);
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox1.Location = new System.Drawing.Point(52, 111);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(477, 423);
+            this.pictureBox1.Size = new System.Drawing.Size(1500, 500);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pictureBox1.TabIndex = 11;
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.Paint += new PaintEventHandler(this.pictureBox1_Paint);
+            this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
             // 
             // RayTracerWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SeaShell;
-            this.ClientSize = new System.Drawing.Size(1600, 872);
+            this.ClientSize = new System.Drawing.Size(1600, 912);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.tickLabel);
             this.Controls.Add(this.elapsedTimeLabel);
@@ -193,7 +206,8 @@ namespace COSIG_RayTracer
             this.Controls.Add(this.startButton);
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.loadButton);
-            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.Margin = new System.Windows.Forms.Padding(6);
+            this.MinimumSize = new System.Drawing.Size(1200, 750);
             this.Name = "RayTracerWindow";
             this.Text = "2023 COSIG RayTracer";
             this.Load += new System.EventHandler(this.RayTracerWindow_Load);

@@ -16,5 +16,10 @@ namespace COSIG_RayTracer.Objects
         public Vector3 Normal { get; set; }
         public double T { get; set; }
         public double Tmin { get; set; }
+
+        public Hit()
+        {
+            Found = false;
+        }
     }
 }

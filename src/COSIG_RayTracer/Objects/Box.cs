@@ -1,4 +1,5 @@
-﻿using System;
+﻿using COSIG_RayTracer.Objects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
 {
-    internal class Box
+    internal class Box : Object3D
     {
         // Transformation (Index)
         private int transformationIndex = -1;
@@ -30,5 +31,10 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
 
         // Material
         public Material Material { get; set; }
+
+        public override bool Intersect(Ray ray, Hit hit)
+        {
+            return false;
+        }
     }
 }

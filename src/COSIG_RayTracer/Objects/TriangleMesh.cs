@@ -1,4 +1,5 @@
-﻿using System;
+﻿using COSIG_RayTracer.Objects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
 {
-    internal class Triangles
+    internal class TriangleMesh : Object3D
     {
         // Transformation (Index)
         private int transformationIndex = -1;
@@ -33,12 +34,22 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
 
         public void AddVector(double x, double y, double z)
         {
-            triangles[triangles.Count-1].AddVector(x, y, z);
+            triangles[triangles.Count - 1].AddVector(x, y, z);
         }
 
         public List<Triangle> getTriangles()
         {
             return triangles;
+        }
+
+        public override bool Intersect(Ray ray, Hit hit)
+        {            
+            bool intersects = false;
+            foreach (Triangle triangle in triangles)
+            {
+                intersects = intersects || triangle.Intersect(ray, hit);
+            }
+            return intersects;
         }
     }
 }

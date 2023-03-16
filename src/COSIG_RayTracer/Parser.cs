@@ -1,4 +1,5 @@
-﻿using COSIG_RayTracing_Parser__ConsoleApp_.Objects;
+﻿using COSIG_RayTracer.Objects;
+using COSIG_RayTracing_Parser__ConsoleApp_.Objects;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,9 +19,9 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_
         public Camera Camera { get; set; }
         public List<Light> Lights { get; set; }
         public List<Material> Materials { get; set; }
-        public List<Triangles> Triangles { get; set; }
+        public List<TriangleMesh> TriangleMeshes { get; set; }
         public List<Sphere> Spheres { get; set; }
-        public List<Box> Boxs { get; set; }
+        public List<Box> Boxes { get; set; }
 
         public Parser()
         {
@@ -29,9 +30,9 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_
             Camera = new Camera();
             Lights = new List<Light>();
             Materials = new List<Material>();
-            Triangles = new List<Triangles>();
+            TriangleMeshes = new List<TriangleMesh>();
             Spheres = new List<Sphere>();
-            Boxs = new List<Box>();
+            Boxes = new List<Box>();
         }
 
         public void LoadFile(string filePath)
@@ -77,10 +78,10 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_
                                         Lights.Add(new Light());
                                         break;
                                     case "Triangles":
-                                        Triangles.Add(new Triangles());
+                                        TriangleMeshes.Add(new TriangleMesh());
                                         break;
                                     case "Box":
-                                        Boxs.Add(new Box());
+                                        Boxes.Add(new Box());
                                         break;
                                     case "Sphere":
                                         Spheres.Add(new Sphere());
@@ -164,7 +165,7 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_
                                         }
                                         break;
                                     case "Triangles":
-                                        Triangles lastTriangles = Triangles.Last();
+                                        TriangleMesh lastTriangles = TriangleMeshes.Last();
                                         if (lastTriangles.TransformationIndex == -1)
                                         {
                                             lastTriangles.TransformationIndex = Convert.ToInt32(lineElements[0]);
@@ -179,7 +180,7 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_
                                         }
                                         break;
                                     case "Box":
-                                        Box lastBox = Boxs.Last();
+                                        Box lastBox = Boxes.Last();
                                         if (lastBox.TransformationIndex == -1)
                                         {
                                             lastBox.TransformationIndex = Convert.ToInt32(lineElements[0]);
@@ -216,8 +217,8 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_
                     light.Transformation = Transformations[light.TransformationIndex];
                 }
 
-                // Triangles - T & M
-                foreach (Triangles triangle in Triangles)
+                // TriangleMeshes - T & M
+                foreach (TriangleMesh triangle in TriangleMeshes)
                 {
                     triangle.Transformation = Transformations[triangle.TransformationIndex];
                     foreach (Triangle tri in triangle.getTriangles())
@@ -232,13 +233,23 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_
                     sphere.Transformation = Transformations[sphere.TransformationIndex];
                     sphere.Material = Materials[sphere.MaterialIndex];
                 }
-                // Boxs - T & M
-                foreach (Box box in Boxs)
+                // Boxes - T & M
+                foreach (Box box in Boxes)
                 {
                     box.Transformation = Transformations[box.TransformationIndex];
                     box.Material = Materials[box.MaterialIndex];
                 }
             }
+        }
+
+        internal List<Object3D> GetAllObjects3D()
+        {
+            List<Object3D> objects = new List<Object3D>();
+            objects.Concat(TriangleMeshes.ConvertAll(x => (Object3D)x));
+            objects.Concat(Spheres.ConvertAll(x => (Object3D)x));
+            objects.Concat(Boxes.ConvertAll(x => (Object3D)x));
+           // return objects;
+            return TriangleMeshes.ConvertAll(x => (Object3D)x);
         }
     }
 }
