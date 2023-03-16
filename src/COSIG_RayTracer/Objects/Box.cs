@@ -34,6 +34,34 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
 
         public override bool Intersect(Ray ray, Hit hit)
         {
+
+            float t1X = ((float)(0 - 0.5) - ray.Origin.X) / ray.Direction_Normalized.X;
+            float t1Y = ((float)(0 - 0.5) - ray.Origin.Y) / ray.Direction_Normalized.Y;
+            float t1Z = ((float)(0 - 0.5) - ray.Origin.Z) / ray.Direction_Normalized.Z;
+
+            float t2X = ((float)0.5 - ray.Origin.X) / ray.Direction_Normalized.X;
+            float t2Y = ((float)0.5 - ray.Origin.Y) / ray.Direction_Normalized.Y;
+            float t2Z = ((float)0.5 - ray.Origin.Z) / ray.Direction_Normalized.Z;
+
+            // testar se e paralelo
+            if (ray.Direction_Normalized.X == 0 && (ray.Origin.X < (float)(0 - 0.5) || ray.Origin.X > (float)(0.5)))
+            {
+
+            }
+
+            if (ray.Direction_Normalized.Y == 0 && (ray.Origin.Y < (float)(0 - 0.5) || ray.Origin.Y > (float)(0.5)))
+            {
+
+            }
+
+            if (ray.Direction_Normalized.Z == 0 && (ray.Origin.Z < (float)(0 - 0.5) || ray.Origin.Z > (float)(0.5)))
+            {
+
+            }
+
+
+            // testar se nao e paralelo
+
             return false;
         }
     }
