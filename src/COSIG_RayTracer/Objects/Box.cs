@@ -35,8 +35,8 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
 
         public override bool Intersect(Ray ray, Hit hit)
         {
-            Vector4 origin4 = Transformation.TransformVector4(new Vector4(ray.Origin.X, ray.Origin.Y, ray.Origin.Z, 1.0f), true);
-            Vector4 direction4 = Transformation.TransformVector4(new Vector4(ray.Direction_Normalized.X, ray.Direction_Normalized.Y, ray.Direction_Normalized.Z, 0.0f), true);
+            Vector4 origin4 = Transformation.TransformVector4(Transformation.InvertedTransformationMatrix, new Vector4(ray.Origin.X, ray.Origin.Y, ray.Origin.Z, 1.0f));
+            Vector4 direction4 = Transformation.TransformVector4(Transformation.InvertedTransformationMatrix, new Vector4(ray.Direction_Normalized.X, ray.Direction_Normalized.Y, ray.Direction_Normalized.Z, 0.0f));
             Ray invertTransformedRay = new Ray(
                 new Vector3(origin4.X / origin4.W, origin4.Y / origin4.W, origin4.Z / origin4.W),
                 new Vector3(direction4.X, direction4.Y, direction4.Z)
@@ -71,10 +71,6 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
                 if (tfar < 0) return false;
             }
 
-
-
-
-
             // Y
             // Test if it is paralel
             if (invertTransformedRay.Direction_Normalized.Y == 0)
@@ -100,11 +96,6 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
                 if (tnear > tfar) return false;
                 if (tfar < 0) return false;
             }
-
-
-
-
-
 
             // Z
             // testar se e paralelo
@@ -135,7 +126,19 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
 
             Vector3 P = invertTransformedRay.Origin + (invertTransformedRay.Direction_Normalized * tnear);
 
-            Vector4 P4 = Transformation.TransformVector4(new Vector4(P, 1.0f), false);
+            // normal
+            Vector3 normal =
+                P.X == 0.5 || P.X == -0.5 ?
+                    new Vector3(P.X, 0, 0) :
+                P.Y == 0.5 || P.Y == -0.5 ?
+                    new Vector3(0, P.Y, 0) :
+                    // Else
+                    new Vector3(0, 0, P.Z);
+
+            Vector4 normal4 = Transformation.TransformVector4(Transformation.TransposedInvertedTransformationMatrix, new Vector4(normal, 0.0f));
+            normal = new Vector3(normal4.X, normal4.Y, normal4.Z);
+
+            Vector4 P4 = Transformation.TransformVector4(Transformation.TransformationMatrix, new Vector4(P, 1.0f));
             P = new Vector3(P4.X / P4.W, P4.Y / P4.W, P4.Z / P4.W);
 
             Vector3 v = P - ray.Origin;
@@ -147,14 +150,9 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
                 hit.Found = true;
                 hit.Material = Material;
                 hit.Point = P;
-                hit.Normal = Vector3.Normalize(P);
+                hit.Normal = normal;
                 return true;
             }
-            return false;
-
-
-            // testar se nao e paralelo
-
             return false;
         }
     }

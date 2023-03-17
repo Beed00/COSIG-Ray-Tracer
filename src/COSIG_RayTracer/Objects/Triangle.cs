@@ -77,8 +77,10 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
             if (Y <= -1.0E-6 || B + Y >= 1.0 + 1.0E-6) return false;
 
             Vector3 P = vectors[0] + B * (vectors[1] - vectors[0]) + Y * (vectors[2] - vectors[0]);
-            Vector4 P4 = transformation.TransformVector4(new Vector4(P, 1.0f), false);
+            Vector4 P4 = Transformation.TransformVector4(transformation.TransformationMatrix, new Vector4(P, 1.0f));
             P = new Vector3(P4.X / P4.W, P4.Y / P4.W, P4.Z / P4.W);
+
+            Vector4 normal4 = Transformation.TransformVector4(transformation.TransposedInvertedTransformationMatrix, new Vector4(Normalized_normal, 0.0f));
 
             Vector3 v = P - ray.Origin;
 
@@ -89,7 +91,7 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
                 hit.Found = true;
                 hit.Material = Material;
                 hit.Point = P;
-                hit.Normal = Normalized_normal; // Normal already calculated
+                hit.Normal = new Vector3(normal4.X, normal4.Y, normal4.Z); ;
                 return true;
             }
             return false;

@@ -35,6 +35,8 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
 
         public Matrix4x4 InvertedTransformationMatrix { get; set; }
 
+        public Matrix4x4 TransposedInvertedTransformationMatrix { get; set; }
+
         public Transformation()
         {
             Translation = new Vector3();
@@ -67,24 +69,26 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
             ScaleFunc();
 
             TransformationMatrix = cameraTransformationMatrix * TransformationMatrix;
-            
+
             Matrix4x4.Invert(TransformationMatrix, out Matrix4x4 aux);
             InvertedTransformationMatrix = aux;
+
+            Matrix4x4.Transpose(aux);
+            TransposedInvertedTransformationMatrix = aux;
         }
 
-        public Vector4 TransformVector4(Vector4 vector, bool invertTransformation)
+        public static Vector4 TransformVector4(Matrix4x4 transformationMatrix, Vector4 vector)
         {
             /*
             for (int i = 0; i < 4; i++)
                 for (int j = 0; j < 4; j++)
                     result[i] += TransformationMatrix[i, j] * pointA[j];
             */
-            Matrix4x4 usedTransformation = invertTransformation ? InvertedTransformationMatrix: TransformationMatrix;
             return new Vector4(
-                usedTransformation.M11 * vector.X + usedTransformation.M12 * vector.Y + usedTransformation.M13 * vector.Z + usedTransformation.M14 * vector.W,
-                usedTransformation.M21 * vector.X + usedTransformation.M22 * vector.Y + usedTransformation.M23 * vector.Z + usedTransformation.M24 * vector.W,
-                usedTransformation.M31 * vector.X + usedTransformation.M32 * vector.Y + usedTransformation.M33 * vector.Z + usedTransformation.M34 * vector.W,
-                usedTransformation.M41 * vector.X + usedTransformation.M42 * vector.Y + usedTransformation.M43 * vector.Z + usedTransformation.M44 * vector.W);
+                transformationMatrix.M11 * vector.X + transformationMatrix.M12 * vector.Y + transformationMatrix.M13 * vector.Z + transformationMatrix.M14 * vector.W,
+                transformationMatrix.M21 * vector.X + transformationMatrix.M22 * vector.Y + transformationMatrix.M23 * vector.Z + transformationMatrix.M24 * vector.W,
+                transformationMatrix.M31 * vector.X + transformationMatrix.M32 * vector.Y + transformationMatrix.M33 * vector.Z + transformationMatrix.M34 * vector.W,
+                transformationMatrix.M41 * vector.X + transformationMatrix.M42 * vector.Y + transformationMatrix.M43 * vector.Z + transformationMatrix.M44 * vector.W);
         }
 
         private void Translate()
