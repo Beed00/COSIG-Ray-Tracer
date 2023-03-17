@@ -185,9 +185,9 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
                     em multiplicar cada componente por 255.0 e convertê-la para um inteiro ou um byte
                     sem sinal.Por último, deverão colorir o píxel[i][j] com a cor color assim convertida */
 
-                    parsedContent.Image.Pixels_Red[i, j] = (int)(255.0 * colour.Red);
-                    parsedContent.Image.Pixels_Green[i, j] = (int)(255.0 * colour.Green);
-                    parsedContent.Image.Pixels_Blue[i, j] = (int)(255.0 * colour.Blue);
+                    parsedContent.Image.Pixels_RGB[i, j, 0] = (int)(255.0 * colour.Red);
+                    parsedContent.Image.Pixels_RGB[i, j, 1] = (int)(255.0 * colour.Green);
+                    parsedContent.Image.Pixels_RGB[i, j, 2] = (int)(255.0 * colour.Blue);
                     //Console.WriteLine("Pixel " + i + "," + j + ": R_" + parsedContent.Image.Pixels_Red[i, j] + "G_" + parsedContent.Image.Pixels_Green[i, j] + "B_" + parsedContent.Image.Pixels_Blue[i, j]);
 
                     // Progress Bar
@@ -262,7 +262,7 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
                 {
                     for (int j = 0; j < parsedContent.Image.Res_vertical; j++)
                     {
-                        Color c = Color.FromArgb(parsedContent.Image.Pixels_Red[i, j], parsedContent.Image.Pixels_Green[i, j], parsedContent.Image.Pixels_Blue[i, j]);
+                        Color c = Color.FromArgb(parsedContent.Image.Pixels_RGB[i, j, 0], parsedContent.Image.Pixels_RGB[i, j, 1], parsedContent.Image.Pixels_RGB[i, j, 2]);
                         SolidBrush brush = new SolidBrush(c);
                         g.FillRectangle(brush, hStart + i, vStart + j, 1, 1);
                     }

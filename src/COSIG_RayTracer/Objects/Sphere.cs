@@ -33,10 +33,15 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
         // Material
         public Material Material { get; set; }
 
-        Vector3[] vectors = new Vector3[3];
-
         public override bool Intersect(Ray ray, Hit hit)
         {
+            Vector4 origin4 = Transformation.TransformVector4(new Vector4(ray.Origin.X, ray.Origin.Y, ray.Origin.Z, 1.0f), true);
+            Vector4 direction4 = Transformation.TransformVector4(new Vector4(ray.Direction_Normalized.X, ray.Direction_Normalized.Y, ray.Direction_Normalized.Z, 0.0f), true);
+            Ray invertTransformedRay = new Ray(
+                new Vector3(origin4.X / origin4.W, origin4.Y / origin4.W, origin4.Z / origin4.W),
+                new Vector3(direction4.X, direction4.Y, direction4.Z)
+                );
+
             // distancia do Ponto a Intersecao
             float t = 0;
 
@@ -56,19 +61,19 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
              * 
             */
             // a
-            float a = (float)Math.Pow(ray.Direction_Normalized.X, 2) +
-                      (float)Math.Pow(ray.Direction_Normalized.Y, 2) +
-                      (float)Math.Pow(ray.Direction_Normalized.Z, 2);
+            float a = (float)Math.Pow(invertTransformedRay.Direction_Normalized.X, 2) +
+                      (float)Math.Pow(invertTransformedRay.Direction_Normalized.Y, 2) +
+                      (float)Math.Pow(invertTransformedRay.Direction_Normalized.Z, 2);
 
             // b
-            float b = 2 * ((ray.Direction_Normalized.X * ray.Origin.X) +
-                (ray.Direction_Normalized.Y * ray.Origin.Y) +
-                (ray.Direction_Normalized.Z * ray.Origin.Z));
+            float b = 2 * ((invertTransformedRay.Direction_Normalized.X * invertTransformedRay.Origin.X) +
+                (invertTransformedRay.Direction_Normalized.Y * invertTransformedRay.Origin.Y) +
+                (invertTransformedRay.Direction_Normalized.Z * invertTransformedRay.Origin.Z));
 
             // c
-            float c = (float)Math.Pow(ray.Origin.X, 2) +
-                      (float)Math.Pow(ray.Origin.Y, 2) +
-                      (float)Math.Pow(ray.Origin.Z, 2) -
+            float c = (float)Math.Pow(invertTransformedRay.Origin.X, 2) +
+                      (float)Math.Pow(invertTransformedRay.Origin.Y, 2) +
+                      (float)Math.Pow(invertTransformedRay.Origin.Z, 2) -
                       1;
 
             // Δ
@@ -102,16 +107,21 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
                 }
             }
 
-            Vector3 P = ray.Origin + (ray.Direction_Normalized * t);
+            Vector3 P = invertTransformedRay.Origin + (invertTransformedRay.Direction_Normalized * t);
 
-            hit.T = t;
+            Vector4 P4 = Transformation.TransformVector4(new Vector4(P, 1.0f), false);
+            P = new Vector3(P4.X / P4.W, P4.Y / P4.W, P4.Z / P4.W);
+
+            Vector3 v = P - ray.Origin;
+
+            hit.T = v.Length();
             if (hit.T > 1.0E-6 && hit.T < hit.Tmin)
             {
                 hit.Tmin = hit.T;
                 hit.Found = true;
                 hit.Material = Material;
                 hit.Point = P;
-                hit.Normal = Vector3.Normalize(P); // Normal already calculated 
+                hit.Normal = Vector3.Normalize(P);
                 return true;
             }
             return false;

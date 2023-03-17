@@ -39,9 +39,8 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
         }
 
         public Vector3[,] Pixels { get; set; }
-        public int[,] Pixels_Red { get; set; }
-        public int[,] Pixels_Green { get; set; }
-        public int[,] Pixels_Blue { get; set; }
+
+        public int[,,] Pixels_RGB { get; set; }
 
         // Constructor
         public Image()
@@ -52,9 +51,7 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
         public void InitializePixels()
         {
             Pixels = new Vector3[res_horizontal, res_vertical];
-            Pixels_Red = new int[res_horizontal, res_vertical];
-            Pixels_Green = new int[res_horizontal, res_vertical];
-            Pixels_Blue = new int[res_horizontal, res_vertical];
+            Pixels_RGB = new int[res_horizontal, res_vertical, 3];
         }
     }
 }
