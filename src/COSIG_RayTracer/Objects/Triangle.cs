@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
 {
-    internal class Triangle : Object3D
+    internal class Triangle
     {
         // Material (Index)
         private int materialIndex = -1;
@@ -48,39 +48,41 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
 
         }
 
-        public override bool Intersect(Ray ray, Hit hit)
+        public bool Intersect(Ray ray, Ray invertTransformedRay, Hit hit, Transformation transformation)
         {
             // |A|
             Matrix4x4 matrix_A = new Matrix4x4(
-                vectors[0].X - vectors[1].X, vectors[0].X - vectors[2].X, ray.Direction_Normalized.X, 0,
-                vectors[0].Y - vectors[1].Y, vectors[0].Y - vectors[2].Y, ray.Direction_Normalized.Y, 0,
-                vectors[0].Z - vectors[1].Z, vectors[0].Z - vectors[2].Z, ray.Direction_Normalized.Z, 0,
+                vectors[0].X - vectors[1].X, vectors[0].X - vectors[2].X, invertTransformedRay.Direction_Normalized.X, 0,
+                vectors[0].Y - vectors[1].Y, vectors[0].Y - vectors[2].Y, invertTransformedRay.Direction_Normalized.Y, 0,
+                vectors[0].Z - vectors[1].Z, vectors[0].Z - vectors[2].Z, invertTransformedRay.Direction_Normalized.Z, 0,
                 0, 0, 0, 1);
             float A_Det = matrix_A.GetDeterminant();
 
             // B
             Matrix4x4 matrix_AB = new Matrix4x4(
-                vectors[0].X - ray.Origin.X, vectors[0].X - vectors[2].X, ray.Direction_Normalized.X, 0,
-                vectors[0].Y - ray.Origin.Y, vectors[0].Y - vectors[2].Y, ray.Direction_Normalized.Y, 0,
-                vectors[0].Z - ray.Origin.Z, vectors[0].Z - vectors[2].Z, ray.Direction_Normalized.Z, 0,
+                vectors[0].X - invertTransformedRay.Origin.X, vectors[0].X - vectors[2].X, invertTransformedRay.Direction_Normalized.X, 0,
+                vectors[0].Y - invertTransformedRay.Origin.Y, vectors[0].Y - vectors[2].Y, invertTransformedRay.Direction_Normalized.Y, 0,
+                vectors[0].Z - invertTransformedRay.Origin.Z, vectors[0].Z - vectors[2].Z, invertTransformedRay.Direction_Normalized.Z, 0,
                 0, 0, 0, 1);
             float B = matrix_AB.GetDeterminant() / A_Det;
             if (B <= -1.0E-6) return false;
 
             // Y
             Matrix4x4 matrix_AY = new Matrix4x4(
-                vectors[0].X - vectors[1].X, vectors[0].X - ray.Origin.X, ray.Direction_Normalized.X, 0,
-                vectors[0].Y - vectors[1].Y, vectors[0].Y - ray.Origin.Y, ray.Direction_Normalized.Y, 0,
-                vectors[0].Z - vectors[1].Z, vectors[0].Z - ray.Origin.Z, ray.Direction_Normalized.Z, 0,
+                vectors[0].X - vectors[1].X, vectors[0].X - invertTransformedRay.Origin.X, invertTransformedRay.Direction_Normalized.X, 0,
+                vectors[0].Y - vectors[1].Y, vectors[0].Y - invertTransformedRay.Origin.Y, invertTransformedRay.Direction_Normalized.Y, 0,
+                vectors[0].Z - vectors[1].Z, vectors[0].Z - invertTransformedRay.Origin.Z, invertTransformedRay.Direction_Normalized.Z, 0,
                 0, 0, 0, 1);
             float Y = matrix_AY.GetDeterminant() / A_Det;
-            if (Y <= -1.0E-6 || B + Y >= 1.0 + 1.0E-6) return false;            
+            if (Y <= -1.0E-6 || B + Y >= 1.0 + 1.0E-6) return false;
 
             Vector3 P = vectors[0] + B * (vectors[1] - vectors[0]) + Y * (vectors[2] - vectors[0]);
+            Vector4 P4 = transformation.TransformVector4(new Vector4(P, 1.0f), false);
+            P = new Vector3(P4.X / P4.W, P4.Y / P4.W, P4.Z / P4.W);
 
             Vector3 v = P - ray.Origin;
 
-            hit.T = v.Length(); 
+            hit.T = v.Length();
             if (hit.T > 1.0E-6 && hit.T < hit.Tmin)
             {
                 hit.Tmin = hit.T;

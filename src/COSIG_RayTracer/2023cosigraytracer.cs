@@ -80,20 +80,15 @@ namespace COSIG_RayTracer
 
         private void elapsedTimeTimer_Tick(object sender, EventArgs e)
         {
-            if (loadLevel < 100)
+            if (progressBar.Value < 100)
             {
                 timer++;
                 tickLabel.Text = timer.ToString();
-
-                loadLevel += 10;
-                progressBar.Value = loadLevel;
             }
             else
             {
                 elapsedTimeTimer.Stop();
                 timer = 0;
-                loadLevel = 0;
-                progressBar.Value = loadLevel;
             }
         }
 
@@ -194,6 +189,10 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
                     parsedContent.Image.Pixels_Green[i, j] = (int)(255.0 * colour.Green);
                     parsedContent.Image.Pixels_Blue[i, j] = (int)(255.0 * colour.Blue);
                     //Console.WriteLine("Pixel " + i + "," + j + ": R_" + parsedContent.Image.Pixels_Red[i, j] + "G_" + parsedContent.Image.Pixels_Green[i, j] + "B_" + parsedContent.Image.Pixels_Blue[i, j]);
+
+                    // Progress Bar
+                    progressBar.Value = (j * parsedContent.Image.Res_horizontal + i + 1) * 100 / (parsedContent.Image.Res_vertical * parsedContent.Image.Res_horizontal);
+                    Console.WriteLine(j * parsedContent.Image.Res_horizontal + i + 1 + " of " + parsedContent.Image.Res_vertical * parsedContent.Image.Res_horizontal);
                 }
             }
             Console.WriteLine("Reached the End");
@@ -211,7 +210,7 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
                 Tmin = double.MaxValue // usem um valor muito elevado. Por exemplo, hit.tmin = 1.0E12;
             };
             foreach (Object3D obj in parsedContent.GetAllObjects3D()) // ciclo para percorrer todos os objectos da cena
-            {                
+            {
                 obj.Intersect(ray, hit);
             }
             if (hit.Found)

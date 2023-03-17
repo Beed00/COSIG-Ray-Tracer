@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -110,7 +111,7 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_
                                         switch (lineElements[0])
                                         {
                                             case "T":
-                                                Transformations[Transformations.Count - 1].SetTranslation(Convert.ToDouble(lineElements[1]), Convert.ToDouble(lineElements[2]), Convert.ToDouble(lineElements[3]));
+                                                Transformations[Transformations.Count - 1].SetTranslation(Convert.ToSingle(lineElements[1]), Convert.ToSingle(lineElements[2]), Convert.ToSingle(lineElements[3]));
                                                 break;
                                             case "Rx":
                                                 Transformations[Transformations.Count - 1].Rotation_x = Convert.ToDouble(lineElements[1]);
@@ -122,7 +123,7 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_
                                                 Transformations[Transformations.Count - 1].Rotation_z = Convert.ToDouble(lineElements[1]);
                                                 break;
                                             case "S":
-                                                Transformations[Transformations.Count - 1].SetScale(Convert.ToDouble(lineElements[1]), Convert.ToDouble(lineElements[2]), Convert.ToDouble(lineElements[3]));
+                                                Transformations[Transformations.Count - 1].SetScale(Convert.ToSingle(lineElements[1]), Convert.ToSingle(lineElements[2]), Convert.ToSingle(lineElements[3]));
                                                 break;
                                             default: break;
                                         }
@@ -210,17 +211,24 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_
 
                 // camera - T
                 Camera.Transformation = Transformations[Camera.TransformationIndex];
+                Camera.Transformation.CalculateTransformationMatrix(new Matrix4x4(
+                    1, 0, 0, 0,
+                    0, 1, 0, 0,
+                    0, 0, 1, 0,
+                    0, 0, 0, 1));
 
                 // Lights - T
                 foreach (Light light in Lights)
                 {
                     light.Transformation = Transformations[light.TransformationIndex];
+                    light.Transformation.CalculateTransformationMatrix(Camera.Transformation.TransformationMatrix);
                 }
 
                 // TriangleMeshes - T & M
                 foreach (TriangleMesh triangle in TriangleMeshes)
                 {
                     triangle.Transformation = Transformations[triangle.TransformationIndex];
+                    triangle.Transformation.CalculateTransformationMatrix(Camera.Transformation.TransformationMatrix);
                     foreach (Triangle tri in triangle.getTriangles())
                     {
                         tri.Material = Materials[tri.MaterialIndex];
@@ -231,12 +239,14 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_
                 foreach (Sphere sphere in Spheres)
                 {
                     sphere.Transformation = Transformations[sphere.TransformationIndex];
+                    sphere.Transformation.CalculateTransformationMatrix(Camera.Transformation.TransformationMatrix);
                     sphere.Material = Materials[sphere.MaterialIndex];
                 }
                 // Boxes - T & M
                 foreach (Box box in Boxes)
                 {
                     box.Transformation = Transformations[box.TransformationIndex];
+                    box.Transformation.CalculateTransformationMatrix(Camera.Transformation.TransformationMatrix);
                     box.Material = Materials[box.MaterialIndex];
                 }
             }
@@ -244,12 +254,11 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_
 
         internal List<Object3D> GetAllObjects3D()
         {
-            List<Object3D> objects = new List<Object3D>();
-            objects.Concat(TriangleMeshes.ConvertAll(x => (Object3D)x));
-            objects.Concat(Spheres.ConvertAll(x => (Object3D)x));
-            objects.Concat(Boxes.ConvertAll(x => (Object3D)x));
-           // return objects;
-            return TriangleMeshes.ConvertAll(x => (Object3D)x);
+            return TriangleMeshes.Cast<Object3D>()
+                .Concat(Spheres.Cast<Object3D>())
+                .Concat(Boxes.Cast<Object3D>())
+                .ToList();
+
         }
     }
 }
