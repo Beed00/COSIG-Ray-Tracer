@@ -113,7 +113,7 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
             Vector3 normal = Vector3.Normalize(P);
             Vector4 normal4 = Transformation.TransformVector4(Transformation.TransposedInvertedTransformationMatrix, new Vector4(normal, 0.0f));
             normal = new Vector3(normal4.X, normal4.Y, normal4.Z);
-
+            normal = Vector3.Normalize(normal);
             Vector4 P4 = Transformation.TransformVector4(Transformation.TransformationMatrix, new Vector4(P, 1.0f));
             P = new Vector3(P4.X / P4.W, P4.Y / P4.W, P4.Z / P4.W);
 

@@ -49,13 +49,14 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
             Vector4 direction4 = Transformation.TransformVector4(Transformation.InvertedTransformationMatrix, new Vector4(ray.Direction_Normalized.X, ray.Direction_Normalized.Y, ray.Direction_Normalized.Z, 0.0f));
             Ray invertTransformedRay = new Ray(
                 new Vector3(origin4.X / origin4.W, origin4.Y / origin4.W, origin4.Z / origin4.W),
-                new Vector3(direction4.X, direction4.Y, direction4.Z)
+                Vector3.Normalize(new Vector3(direction4.X, direction4.Y, direction4.Z))
                 );
             bool intersects = false;
             foreach (Triangle triangle in triangles)
             {
-                intersects = intersects || triangle.Intersect(ray, invertTransformedRay, hit, Transformation);
+                intersects = triangle.Intersect(ray, invertTransformedRay, hit, Transformation) || intersects;
             }
+
             return intersects;
         }
     }

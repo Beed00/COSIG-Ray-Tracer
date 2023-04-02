@@ -42,5 +42,25 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
             Green = green;
             Blue = blue;
         }
+
+        public static Colour3 operator +(Colour3 c1, Colour3 c2)
+        {
+            return new Colour3(c1.Red + c2.Red, c1.Green + c2.Green, c1.Blue + c2.Blue);
+        }
+
+        public static Colour3 operator *(Colour3 c1, Colour3 c2)
+        {
+            return new Colour3(c1.Red * c2.Red, c1.Green * c2.Green, c1.Blue * c2.Blue);
+        }
+
+        public static Colour3 operator *(Colour3 c1, double d)
+        {
+            return new Colour3(c1.Red * d, c1.Green * d, c1.Blue * d);
+        }
+
+        public static Colour3 operator /(Colour3 c1, int i)
+        {
+            return new Colour3(c1.Red / i, c1.Green / i, c1.Blue / i);
+        }
     }
 }

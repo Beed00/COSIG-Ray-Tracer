@@ -2,6 +2,7 @@
 using COSIG_RayTracing_Parser__ConsoleApp_;
 using COSIG_RayTracing_Parser__ConsoleApp_.Objects;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -9,9 +10,12 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.ConstrainedExecution;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace COSIG_RayTracer
 {
@@ -61,6 +65,7 @@ namespace COSIG_RayTracer
 
             //"C:/Users/emonteiro/OneDrive - Hitachi Solutions/Desktop/Mestrado ISEP/1ano/2semestre/COSIG/Test_Scene_1.txt";
             string filePath = openFileDialog.FileName;
+            parsedContent = new Parser();
             parsedContent.LoadFile(filePath);
 
             if (isDebuggingRun)
@@ -107,7 +112,7 @@ namespace COSIG_RayTracer
 
             /* comecem por calcular o ponto origin de onde irão partir todos os raios primários (o ponto 
             correspondente à posição da câmara, ou seja, o ponto(0.0, 0.0, distance)) */
-            Vector3 origin = new Vector3((float)0.0, (float)0.0, (float)parsedContent.Camera.Distance);
+            Vector3 origin = new Vector3(0.0f, 0.0f, (float)parsedContent.Camera.Distance);
 
             for (int j = 0; j < parsedContent.Image.Res_vertical; j++)
             { // ciclo para percorrer todas as linhas da imagem
@@ -158,7 +163,7 @@ namespace COSIG_RayTracer
                     acompanhar recursivamente o percurso do referido raio; quando regressar, esta
                     função deverá retornar uma cor color */
 
-                    Colour3 colour = TraceRay(ray, max_recursivity); /* em que ray designa o raio a ser acompanhado e rec um 
+                    Colour3 colour = TraceRay(ray, max_recursivity, i, j); /* em que ray designa o raio a ser acompanhado e rec um 
                     inteiro que contém o nível máximo de recursividade
 
 /* (continua)
@@ -192,7 +197,7 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
 
                     // Progress Bar
                     progressBar.Value = (j * parsedContent.Image.Res_horizontal + i + 1) * 100 / (parsedContent.Image.Res_vertical * parsedContent.Image.Res_horizontal);
-                    Console.WriteLine(j * parsedContent.Image.Res_horizontal + i + 1 + " of " + parsedContent.Image.Res_vertical * parsedContent.Image.Res_horizontal);
+                    //Console.WriteLine(j * parsedContent.Image.Res_horizontal + i + 1 + " of " + parsedContent.Image.Res_vertical * parsedContent.Image.Res_horizontal);
                 }
             }
             Console.WriteLine("Reached the End");
@@ -200,11 +205,8 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
             pictureBox1.Invalidate();
         }
 
-        private Colour3 TraceRay(Ray ray, int max_recursion)
+        private Colour3 TraceRay(Ray ray, int max_recursion, int i, int j)
         {
-            //(255.0 / 255.0), (182.0 / 255.0), (193.0 / 255.0)
-            //return new Colour3(0.4, 0.5, 0.6);
-
             Hit hit = new Hit
             {
                 Tmin = double.MaxValue // usem um valor muito elevado. Por exemplo, hit.tmin = 1.0E12;
@@ -214,8 +216,44 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
                 obj.Intersect(ray, hit);
             }
             if (hit.Found)
-                return hit.Material.Colour; /* se houver intersecção, retorna a cor do material 
-                constituinte do objecto intersectado mais próximo da origem do raio */
+            {
+                Colour3 color = new Colour3(0.0, 0.0, 0.0); // inicialização
+                foreach (Light light in parsedContent.Lights)
+                { // ciclo para percorrer todas as fontes de luz da cena
+                    // cálculo da componente de reflexão ambiente com origem na fonte de luz light
+                    color += light.Intensity * hit.Material.Colour * hit.Material.Ambient;
+
+                    // cálculo da componente de reflexão difusa com origem na fonte de luz light
+                    /* comecem por construir o vector l que une o ponto de intersecção ao ponto
+                    correspondente à posição da fonte de luz light */
+                    Vector4 lightPos4 = Transformation.TransformVector4(light.Transformation.TransformationMatrix, new Vector4(0.0f, 0.0f, 0.0f, 1.0f));
+                    Vector3 transformedLightPoint3 = new Vector3(lightPos4.X / lightPos4.W, lightPos4.Y / lightPos4.W, lightPos4.Z / lightPos4.W);
+
+                    Vector3 l = transformedLightPoint3 - hit.Point;
+
+                    // normalizem o vector l
+                    l = Vector3.Normalize(l);
+
+                    /* calculem o co-seno do ângulo de incidência da luz. Este é igual ao produto 
+                    escalar do vector normal pelo vector l(assumindo que ambos os vectores são
+                    unitários) */
+                    float cosTheta = Vector3.Dot(hit.Normal, l); // em que “∙” designa o produto escalar de vectores 3D
+                    /* calculem a componente de reflexão difusa e adicionem a cor resultante à cor 
+                    color.Tenham, no entanto, em consideração que só interessa calcular esta
+                    componente se o ângulo de incidência θ for inferior a 90.0° (por outras palavras,
+                    se cosTheta > 0.0).Um ângulo de incidência superior àquele valor significa que o
+                    raio luminoso está a incidir no lado de trás da superfície do objecto intersectado */
+                    if (cosTheta > 0.0)
+                    {
+                        color += light.Intensity * hit.Material.Colour * hit.Material.Diffuse * cosTheta;
+                    }
+                }
+                return color / parsedContent.Lights.Count; /* em que sceneLights.length designa o número de 
+                fontes de luz existentes na cena; se houver intersecção, retorna a cor correspondente
+                à componente de luz ambiente reflectida pelo objecto intersectado mais próximo da
+                origem do raio */
+            }
+
             else
                 return parsedContent.Image.BackgroundColour; // caso contrário, retorna a cor de fundo
         }

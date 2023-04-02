@@ -47,15 +47,15 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
             float tfar = float.MaxValue;
             // X
             // testar se e paralelo
-            if (invertTransformedRay.Direction_Normalized.X == 0)
+            if (invertTransformedRay.Direction_Normalized.X == 0.0)
             {
-                if (invertTransformedRay.Origin.X < (float)(0 - 0.5) || invertTransformedRay.Origin.X > (float)(0.5)) return false;
+                if (invertTransformedRay.Origin.X < - 0.5f || invertTransformedRay.Origin.X > 0.5f) return false;
             }
             // if it is not paralel
             else
             {
-                t1 = ((float)-0.5 - invertTransformedRay.Origin.X) / invertTransformedRay.Direction_Normalized.X;
-                t2 = ((float)0.5 - invertTransformedRay.Origin.X) / invertTransformedRay.Direction_Normalized.X;
+                t1 = (-0.5f - invertTransformedRay.Origin.X) / invertTransformedRay.Direction_Normalized.X;
+                t2 = (0.5f - invertTransformedRay.Origin.X) / invertTransformedRay.Direction_Normalized.X;
 
                 if (t1 > t2)
                 {
@@ -68,20 +68,20 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
                 if (t2 < tfar) tfar = t2;
 
                 // checking tnear > tfar not needed for first axis
-                if (tfar < 0) return false;
+                if (tfar < 0.0f) return false;
             }
 
             // Y
             // Test if it is paralel
-            if (invertTransformedRay.Direction_Normalized.Y == 0)
+            if (invertTransformedRay.Direction_Normalized.Y == 0.0f)
             {
-                if ((invertTransformedRay.Origin.Y < (float)(0 - 0.5) || invertTransformedRay.Origin.Y > (float)(0.5))) return false;
+                if (invertTransformedRay.Origin.Y < - 0.5f || invertTransformedRay.Origin.Y > 0.5f) return false;
             }
             // if it is not paralel
             else
             {
-                t1 = ((float)-0.5 - invertTransformedRay.Origin.Y) / invertTransformedRay.Direction_Normalized.Y;
-                t2 = ((float)0.5 - invertTransformedRay.Origin.Y) / invertTransformedRay.Direction_Normalized.Y;
+                t1 = (-0.5f - invertTransformedRay.Origin.Y) / invertTransformedRay.Direction_Normalized.Y;
+                t2 = (0.5f - invertTransformedRay.Origin.Y) / invertTransformedRay.Direction_Normalized.Y;
 
                 if (t1 > t2)
                 {
@@ -94,19 +94,19 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
                 if (t2 < tfar) tfar = t2;
 
                 if (tnear > tfar) return false;
-                if (tfar < 0) return false;
+                if (tfar < 0.0f) return false;
             }
 
             // Z
             // testar se e paralelo
-            if (invertTransformedRay.Direction_Normalized.Z == 0)
+            if (invertTransformedRay.Direction_Normalized.Z == 0.0f)
             {
-                if ((invertTransformedRay.Origin.Z < (float)(0 - 0.5) || invertTransformedRay.Origin.Z > (float)(0.5))) return false;
+                if (invertTransformedRay.Origin.Z < - 0.5f || invertTransformedRay.Origin.Z > 0.5f) return false;
             }
             else
             {
-                t1 = ((float)-0.5 - invertTransformedRay.Origin.Z) / invertTransformedRay.Direction_Normalized.Z;
-                t2 = ((float)0.5 - invertTransformedRay.Origin.Z) / invertTransformedRay.Direction_Normalized.Z;
+                t1 = (-0.5f - invertTransformedRay.Origin.Z) / invertTransformedRay.Direction_Normalized.Z;
+                t2 = (0.5f - invertTransformedRay.Origin.Z) / invertTransformedRay.Direction_Normalized.Z;
 
                 if (t1 > t2)
                 {
@@ -119,7 +119,7 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
                 if (t2 < tfar) tfar = t2;
 
                 if (tnear > tfar) return false;
-                if (tfar < 0) return false;
+                if (tfar < 0.0f) return false;
             }
 
             //Get P of tnear
@@ -128,15 +128,19 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
 
             // normal
             Vector3 normal =
-                P.X == 0.5 || P.X == -0.5 ?
+                P.X == 0.5f || P.X == -0.5f ?
                     new Vector3(P.X, 0, 0) :
-                P.Y == 0.5 || P.Y == -0.5 ?
+                P.Y == 0.5f || P.Y == -0.5f ?
                     new Vector3(0, P.Y, 0) :
                     // Else
                     new Vector3(0, 0, P.Z);
 
+            normal = Vector3.Normalize(normal);
+
             Vector4 normal4 = Transformation.TransformVector4(Transformation.TransposedInvertedTransformationMatrix, new Vector4(normal, 0.0f));
             normal = new Vector3(normal4.X, normal4.Y, normal4.Z);
+
+            normal = Vector3.Normalize(normal);            
 
             Vector4 P4 = Transformation.TransformVector4(Transformation.TransformationMatrix, new Vector4(P, 1.0f));
             P = new Vector3(P4.X / P4.W, P4.Y / P4.W, P4.Z / P4.W);

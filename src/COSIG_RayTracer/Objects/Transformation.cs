@@ -73,8 +73,7 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
             Matrix4x4.Invert(TransformationMatrix, out Matrix4x4 aux);
             InvertedTransformationMatrix = aux;
 
-            Matrix4x4.Transpose(aux);
-            TransposedInvertedTransformationMatrix = aux;
+            TransposedInvertedTransformationMatrix = Matrix4x4.Transpose(aux);
         }
 
         public static Vector4 TransformVector4(Matrix4x4 transformationMatrix, Vector4 vector)
