@@ -8,6 +8,8 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
 {
     internal class Material
     {
+        public int Index { get; set; }
+
         // Colour
         public Colour3 Colour { get; set; }
 
@@ -17,11 +19,11 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
         }
 
         // Coefficients
-        private double ambient;
-        private double diffuse;
-        private double specular;
-        private double refraction;
-        private double refractive_index;
+        private double ambient = 0;
+        private double diffuse = 0;
+        private double specular = 0;
+        private double refraction = 0;
+        private double refractive_index = 0;
 
         public double Ambient
         {

@@ -27,10 +27,23 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
             Intensity = new Colour3(red, green, blue);
         }
 
+        public List<Colour3> MaterialAmbientLights { get; set; } = new List<Colour3>();
+
+        public List<Colour3> MaterialDiffuseLights { get; set; } = new List<Colour3>();
+
         // Constructor
         public Light()
         {
             Intensity = new Colour3();
+        }
+
+        public void createMaterialLightsArray(List<Material> materials)
+        {
+            foreach (Material material in materials)
+            {
+                MaterialAmbientLights.Add(Intensity * material.Colour * material.Ambient);
+                MaterialDiffuseLights.Add(Intensity * material.Colour * material.Diffuse);
+            }
         }
     }
 }

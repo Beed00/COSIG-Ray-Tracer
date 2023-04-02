@@ -37,7 +37,7 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_
         }
 
         public void LoadFile(string filePath)
-        {            
+        {
             if (filePath == null || filePath.Length == 0) return;
             // Open the file for reading
             using (StreamReader reader = new StreamReader(filePath))
@@ -71,7 +71,8 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_
                                         Transformations.Add(new Transformation());
                                         break;
                                     case "Material":
-                                        Materials.Add(new Material());
+                                        int materialIndex = Materials.Count;
+                                        Materials.Add(new Material() { Index = materialIndex });
                                         break;
                                     case "Camera":
                                         cameraCount++;
@@ -222,7 +223,9 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_
                 foreach (Light light in Lights)
                 {
                     light.Transformation = Transformations[light.TransformationIndex];
-                    light.Transformation.CalculateTransformationMatrix(Camera.Transformation.TransformationMatrix);                    
+                    light.Transformation.CalculateTransformationMatrix(Camera.Transformation.TransformationMatrix);
+
+                    light.createMaterialLightsArray(Materials);
                 }
 
                 // TriangleMeshes - T & M

@@ -221,7 +221,7 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
                 foreach (Light light in parsedContent.Lights)
                 { // ciclo para percorrer todas as fontes de luz da cena
                     // cálculo da componente de reflexão ambiente com origem na fonte de luz light
-                    color += light.Intensity * hit.Material.Colour * hit.Material.Ambient;
+                    color += light.MaterialAmbientLights[hit.Material.Index];
 
                     // cálculo da componente de reflexão difusa com origem na fonte de luz light
                     /* comecem por construir o vector l que une o ponto de intersecção ao ponto
@@ -245,7 +245,7 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
                     raio luminoso está a incidir no lado de trás da superfície do objecto intersectado */
                     if (cosTheta > 0.0)
                     {
-                        color += light.Intensity * hit.Material.Colour * hit.Material.Diffuse * cosTheta;
+                        color += light.MaterialDiffuseLights[hit.Material.Index] * cosTheta;
                     }
                 }
                 return color / parsedContent.Lights.Count; /* em que sceneLights.length designa o número de 
