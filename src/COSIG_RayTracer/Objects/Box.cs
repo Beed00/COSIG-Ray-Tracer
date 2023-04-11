@@ -40,6 +40,7 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
             Ray invertTransformedRay = new Ray(
                 new Vector3(origin4.X / origin4.W, origin4.Y / origin4.W, origin4.Z / origin4.W),
                 new Vector3(direction4.X, direction4.Y, direction4.Z)
+                //Vector3.Normalize(new Vector3(direction4.X, direction4.Y, direction4.Z))
                 );
 
             float t1, t2, taux;
@@ -49,7 +50,7 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
             // testar se e paralelo
             if (invertTransformedRay.Direction_Normalized.X == 0.0)
             {
-                if (invertTransformedRay.Origin.X < - 0.5f || invertTransformedRay.Origin.X > 0.5f) return false;
+                if (invertTransformedRay.Origin.X < -0.5f || invertTransformedRay.Origin.X > 0.5f) return false;
             }
             // if it is not paralel
             else
@@ -75,7 +76,7 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
             // Test if it is paralel
             if (invertTransformedRay.Direction_Normalized.Y == 0.0f)
             {
-                if (invertTransformedRay.Origin.Y < - 0.5f || invertTransformedRay.Origin.Y > 0.5f) return false;
+                if (invertTransformedRay.Origin.Y < -0.5f || invertTransformedRay.Origin.Y > 0.5f) return false;
             }
             // if it is not paralel
             else
@@ -101,7 +102,7 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
             // testar se e paralelo
             if (invertTransformedRay.Direction_Normalized.Z == 0.0f)
             {
-                if (invertTransformedRay.Origin.Z < - 0.5f || invertTransformedRay.Origin.Z > 0.5f) return false;
+                if (invertTransformedRay.Origin.Z < -0.5f || invertTransformedRay.Origin.Z > 0.5f) return false;
             }
             else
             {
@@ -140,7 +141,7 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
             Vector4 normal4 = Transformation.TransformVector4(Transformation.TransposedInvertedTransformationMatrix, new Vector4(normal, 0.0f));
             normal = new Vector3(normal4.X, normal4.Y, normal4.Z);
 
-            normal = Vector3.Normalize(normal);            
+            normal = Vector3.Normalize(normal);
 
             Vector4 P4 = Transformation.TransformVector4(Transformation.TransformationMatrix, new Vector4(P, 1.0f));
             P = new Vector3(P4.X / P4.W, P4.Y / P4.W, P4.Z / P4.W);

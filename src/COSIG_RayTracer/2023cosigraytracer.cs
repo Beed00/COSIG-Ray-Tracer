@@ -16,6 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace COSIG_RayTracer
 {
@@ -122,24 +123,24 @@ namespace COSIG_RayTracer
 
                     // calculem as coordenadas P.x, P.y e P.z do centro do píxel[i][j]
 
-                    parsedContent.Image.Pixels[i, j].X = (float)((i + 0.5) * pixelDimension - width / 2.0);
+                    parsedContent.Image.Pixels[i, j].X = (float)((i + 0.5f) * pixelDimension - width / 2.0f);
                     /* a origem do sistema de eixos coordenados está 
                     localizada no centro do plano de projecção, mas o píxel[0][0] está localizado no canto
                     superior esquerdo da imagem; daí a subtracção de width / 2.0 à coordenada x do píxel */
 
-                    parsedContent.Image.Pixels[i, j].Y = (float)(-(j + 0.5) * pixelDimension + height / 2.0); /* a origem do sistema de eixos coordenados está 
+                    parsedContent.Image.Pixels[i, j].Y = (float)(-(j + 0.5f) * pixelDimension + height / 2.0f); /* a origem do sistema de eixos coordenados está 
                     localizada no centro do plano de projecção, mas o píxel[0][0] está localizado no canto
                     superior esquerdo da imagem; daí a adição de height / 2.0 à coordenada y do píxel */
 
-                    parsedContent.Image.Pixels[i, j].Z = 0; // o plano de projecção é o plano z = 0.0;
+                    parsedContent.Image.Pixels[i, j].Z = 0.0f; // o plano de projecção é o plano z = 0.0;
 
                     /* sabendo que o raio que passa pelo centro do píxel[i][j] (o ponto (P.x, P.y, P.z)) tem 
                      origem na posição da câmara(o ponto(0.0, 0.0, distance)), calculem o vector direction
                     que define a direcção do referido raio */
 
                     Vector3 direction = new Vector3(
-                        parsedContent.Image.Pixels[i, j].X - 0,
-                        parsedContent.Image.Pixels[i, j].Y - 0,
+                        parsedContent.Image.Pixels[i, j].X - 0.0f,
+                        parsedContent.Image.Pixels[i, j].Y - 0.0f,
                         parsedContent.Image.Pixels[i, j].Z - (float)parsedContent.Camera.Distance
                         ); // ou seja, direction = new Vector3(P.x, P.y, -distance);
 
@@ -231,6 +232,8 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
 
                     Vector3 l = transformedLightPoint3 - hit.Point;
 
+                    double tLight = l.Length();
+
                     // normalizem o vector l
                     l = Vector3.Normalize(l);
 
@@ -243,9 +246,42 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
                     componente se o ângulo de incidência θ for inferior a 90.0° (por outras palavras,
                     se cosTheta > 0.0).Um ângulo de incidência superior àquele valor significa que o
                     raio luminoso está a incidir no lado de trás da superfície do objecto intersectado */
-                    if (cosTheta > 0.0)
+                    if (cosTheta > 0.0f)
                     {
-                        color += light.MaterialDiffuseLights[hit.Material.Index] * cosTheta;
+                        /* construam o raio de detecção de sombra que tem origem no ponto de 
+                        intersecção e a direcção do vector l */
+                        Ray shadowRay = new Ray(transformedLightPoint3, -l);
+                        Hit shadowHit = new Hit()
+                        {
+                            Tmin = tLight - 1.0E-3 // a intersecção, se existir, terá de ocorrer aquém da posição da fonte de luz
+                        };
+
+                        foreach (Object3D obj in parsedContent.GetAllObjects3D())
+                        { // ciclo para percorrer os objectos da cena
+                            obj.Intersect(shadowRay, shadowHit);
+
+                            if (shadowHit.Found)
+                            {/* há sombra, pois o raio shadowRay intersecta um
+                                (basta um) objecto da cena, a distância shadowHit.t do ponto de
+                                intersecção à origem do raio é shadowHit.t > 0.0(pois a intersecção terá
+                                de ocorrer à frente da origem do raio) e shadowHit.t < shadowHit.tLight
+                                (pois a intersecção terá de ocorrer aquém da posição da fonte de luz).
+                        Mais precisamente, e para evitar o problema, já referido, que decorre de
+                        a precisão de cálculo ser limitada, a intersecção só deverá ser reportada
+                        quando a distância shadowHit.t do ponto de intersecção à origem do raio
+                        for shadowHit.t > ε e não shadowHit.t > 0.0(documento “TR - 05.pdf”,
+                        págs. 14 a 17)*/
+                                break; /* encontrada que está uma obstrução à passagem da luz 
+                            proveniente da fonte light, não há necessidade de percorrer os
+                            restantes objectos da cena*/
+                            }
+                        }
+                        if (!shadowHit.Found) /* atentem na negação “!” da condição; se o ponto 
+                            estiver exposto à luz proveniente da fonte light, calculem a componente de
+                            reflexão difusa e adicionem a cor resultante à cor colo */
+                        {
+                            color += light.MaterialDiffuseLights[hit.Material.Index] * cosTheta;
+                        }
                     }
                 }
                 return color / parsedContent.Lights.Count; /* em que sceneLights.length designa o número de 
@@ -253,9 +289,10 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
                 à componente de luz ambiente reflectida pelo objecto intersectado mais próximo da
                 origem do raio */
             }
-
             else
+            {
                 return parsedContent.Image.BackgroundColour; // caso contrário, retorna a cor de fundo
+            }
         }
 
 
