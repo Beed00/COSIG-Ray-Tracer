@@ -10,6 +10,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Reflection;
 using System.Runtime.ConstrainedExecution;
 using System.Security.Policy;
 using System.Text;
@@ -284,6 +285,43 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
                         }
                     }
                 }
+                
+
+
+                /* antes de calcularem recursivamente a componente de reflexão especular, confirmem que a 
+                profundidade máxima de recursividade rec do traçador de raios ainda não foi atingida */
+
+                if (max_recursion > 0)
+                {
+
+                    // comecem por calcular o co-seno do ângulo do raio incidente
+                    Vector3 cosThetaV = -(ray.Direction_Normalized * hit.Normal);
+
+                    if (hit.Material.Specular > 0.0)
+                    { // o material constituinte do objecto intersectado reflecte a luz especular
+
+                        // calculem a direcção do raio reflectido
+                        Vector3 r = (ray.Direction_Normalized + 2.0f * cosThetaV *  hit.Normal);
+                        // normalizem o vector
+                        r = Vector3.Normalize(r);
+
+                        // construam o raio reflectido que tem origem no ponto de intersecção e a direcção do vector r
+                        Ray reflectedRay = new Ray(hit.Point, r);
+
+                        /* uma vez construído o raio, deverão invocar a função traceRay(), a qual irá acompanhar 
+                        recursivamente o percurso do referido raio; quando regressar, a cor retornada por esta função
+                        deverá ser usada para calcular a componente de reflexão especular, a qual será adicionada à
+                        cor color */
+
+                        color = color + hit.Material.Colour * hit.Material.Specular * TraceRay(reflectedRay, max_recursion - 1, i, j);
+                        
+                        // em alternativa, poderão recorrer à aproximação de Schlick
+                        //color = color + hit.Material.Colour * (hit.Material.Specular + (1.0 - hit.Material.Specular) * Math.Pow((1.0f - cosThetaV),5)) * TraceRay(reflectedRay, max_recursion - 1, i, j);
+                    }
+                }
+
+                
+
                 return color / parsedContent.Lights.Count; /* em que sceneLights.length designa o número de 
                 fontes de luz existentes na cena; se houver intersecção, retorna a cor correspondente
                 à componente de luz ambiente reflectida pelo objecto intersectado mais próximo da
