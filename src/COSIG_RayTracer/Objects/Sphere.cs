@@ -62,9 +62,10 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
              * 
             */
             // a
-            float a = (float)Math.Pow(invertTransformedRay.Direction_Normalized.X, 2) +
-                      (float)Math.Pow(invertTransformedRay.Direction_Normalized.Y, 2) +
-                      (float)Math.Pow(invertTransformedRay.Direction_Normalized.Z, 2);
+            float a = (float)
+                     (Math.Pow(invertTransformedRay.Direction_Normalized.X, 2) +
+                      Math.Pow(invertTransformedRay.Direction_Normalized.Y, 2) +
+                      Math.Pow(invertTransformedRay.Direction_Normalized.Z, 2));
 
             // b
             float b = 2 * ((invertTransformedRay.Direction_Normalized.X * invertTransformedRay.Origin.X) +
@@ -72,10 +73,11 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
                 (invertTransformedRay.Direction_Normalized.Z * invertTransformedRay.Origin.Z));
 
             // c
-            float c = (float)Math.Pow(invertTransformedRay.Origin.X, 2) +
-                      (float)Math.Pow(invertTransformedRay.Origin.Y, 2) +
-                      (float)Math.Pow(invertTransformedRay.Origin.Z, 2) -
-                      1;
+            float c = (float)
+                    (Math.Pow(invertTransformedRay.Origin.X, 2) +
+                     Math.Pow(invertTransformedRay.Origin.Y, 2) +
+                     Math.Pow(invertTransformedRay.Origin.Z, 2) -
+                      1.0);
 
             // Δ
             float delta = (float)Math.Pow(b, 2) - (4 * a * c);
@@ -121,7 +123,7 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
             Vector3 v = P - ray.Origin;
 
             hit.T = v.Length();
-            if (hit.T > 1.0E-6 && hit.T < hit.Tmin)
+            if (hit.T > 1.0E-4 && hit.T < hit.Tmin)
             {
                 hit.Tmin = hit.T;
                 hit.Found = true;

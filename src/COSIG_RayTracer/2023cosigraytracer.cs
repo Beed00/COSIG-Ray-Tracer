@@ -101,7 +101,7 @@ namespace COSIG_RayTracer
 
         private void startButton_Click(object sender, EventArgs e)
         {
-            int max_recursivity = 1;
+            int max_recursivity = 2;
             //startPrimaryRays();
             double fov_radians = parsedContent.Camera.Field_of_view * Math.PI / 180;
             double height = 2.0 * parsedContent.Camera.Distance * Math.Tan(fov_radians / 2.0);
@@ -165,7 +165,7 @@ namespace COSIG_RayTracer
                     acompanhar recursivamente o percurso do referido raio; quando regressar, esta
                     função deverá retornar uma cor color */
 
-                    Colour3 colour = TraceRay(ray, max_recursivity, i, j); /* em que ray designa o raio a ser acompanhado e rec um 
+                    Colour3 colour = TraceRay(ray, max_recursivity); /* em que ray designa o raio a ser acompanhado e rec um 
                     inteiro que contém o nível máximo de recursividade
 
 /* (continua)
@@ -207,7 +207,7 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
             pictureBox1.Invalidate();
         }
 
-        private Colour3 TraceRay(Ray ray, int max_recursion, int i, int j)
+        private Colour3 TraceRay(Ray ray, int max_recursion)
         {
             Hit hit = new Hit
             {
@@ -285,7 +285,7 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
                         }
                     }
                 }
-                
+
 
 
                 /* antes de calcularem recursivamente a componente de reflexão especular, confirmem que a 
@@ -295,36 +295,56 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
                 {
 
                     // comecem por calcular o co-seno do ângulo do raio incidente
-                    Vector3 cosThetaV = -(ray.Direction_Normalized * hit.Normal);
+                    float cosThetaV = -Vector3.Dot(ray.Direction_Normalized, hit.Normal);
 
                     if (hit.Material.Specular > 0.0)
                     { // o material constituinte do objecto intersectado reflecte a luz especular
 
                         // calculem a direcção do raio reflectido
-                        Vector3 r = (ray.Direction_Normalized + 2.0f * cosThetaV *  hit.Normal);
+                        Vector3 r = (ray.Direction_Normalized + 2.0f * cosThetaV * hit.Normal);
                         // normalizem o vector
                         r = Vector3.Normalize(r);
 
                         // construam o raio reflectido que tem origem no ponto de intersecção e a direcção do vector r
-                        Ray reflectedRay = new Ray(hit.Point, r);
+                        Ray reflectedRay = new Ray(hit.Point + 1.0E-4f * hit.Normal, r);
 
                         /* uma vez construído o raio, deverão invocar a função traceRay(), a qual irá acompanhar 
                         recursivamente o percurso do referido raio; quando regressar, a cor retornada por esta função
                         deverá ser usada para calcular a componente de reflexão especular, a qual será adicionada à
                         cor color */
 
-                        color = color + hit.Material.Colour * hit.Material.Specular * TraceRay(reflectedRay, max_recursion - 1, i, j);
-                        /*
-                        Vector3 oneF = new Vector3(
-                            (float)hit.Material.Specular + (1.0f - (float)hit.Material.Specular) * (float)Math.Pow(1.0f - cosThetaV.X, 5.0),
-                            (float)hit.Material.Specular + (1.0f - (float)hit.Material.Specular) * (float)Math.Pow(1.0f - cosThetaV.Y, 5.0),
-                            (float)hit.Material.Specular + (1.0f - (float)hit.Material.Specular) * (float)Math.Pow(1.0f - cosThetaV.Z, 5.0));
+                        color += hit.Material.Colour * hit.Material.Specular * TraceRay(reflectedRay, max_recursion - 1);
                         // em alternativa, poderão recorrer à aproximação de Schlick
-                        color = color + hit.Material.Colour * (hit.Material.Specular + (1.0f - hit.Material.Specular) * oneF) * TraceRay(reflectedRay, max_recursion - 1, i, j);
-                    */
+                        //color += hit.Material.Colour * (hit.Material.Specular + (1.0 - hit.Material.Specular) * Math.Pow(1.0 - cosThetaV, 5)) * TraceRay(reflectedRay, max_recursion - 1);
+                    }
+                    if (hit.Material.Refraction > 0.0)
+                    { // o material constituinte do objecto intersectado refracta a luz
+                        /* para calcular a razão entre os índices de refracção e o co-seno do ângulo do 
+                        raio refractado, comecem por admitir que o raio luminoso está a transitar do
+                        ar para o meio constituinte do objecto intersectado */
+                        float eta = 1.0f / (float)hit.Material.Refractive_index;
+                        var cosThetaR = Math.Sqrt(1.0f - eta * eta * (1.0f - cosThetaV * cosThetaV));
+                        /* se o raio luminoso estiver a transitar do meio constituinte do objecto
+                        intersectado para o ar, invertam a razão entre os índices de refracção e
+                        troquem o sinal do co - seno do ângulo do raio refractado */
+                        if (cosThetaV < 0.0f)
+                        {
+                            eta = (float)hit.Material.Refractive_index;
+                            cosThetaR = -cosThetaR;
+                        }
+                        // calculem a direcção do raio refractado
+                        Vector3 r = eta * ray.Direction_Normalized + (float)(eta * cosThetaV - cosThetaR) * hit.Normal;
+                        // normalizem o vector
+                        r = Vector3.Normalize(r);
+                        // construam o raio refractado que tem origem no ponto de intersecção e a direcção do vector r
+                        Ray refractedRay = new Ray(hit.Point, r);
+                        /* uma vez construído o raio, deverão invocar a função traceRay(), a qual irá 
+                        acompanhar recursivamente o percurso do referido raio; quando regressar, a
+                        cor retornada por esta função deverá ser usada para calcular a componente
+                        de refracção, a qual será adicionada à cor color */
+                        color += hit.Material.Colour * hit.Material.Refraction * TraceRay(refractedRay, max_recursion - 1);
                     }
                 }
-
                 return color / parsedContent.Lights.Count; /* em que sceneLights.length designa o número de 
                 fontes de luz existentes na cena; se houver intersecção, retorna a cor correspondente
                 à componente de luz ambiente reflectida pelo objecto intersectado mais próximo da

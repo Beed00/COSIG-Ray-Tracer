@@ -13,6 +13,8 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
         // Colour
         public Colour3 Colour { get; set; }
 
+        public Colour3 SpecularColour { get; set; }
+
         public void SetColour(double red, double green, double blue)
         {
             Colour = new Colour3(red, green, blue);
@@ -64,6 +66,11 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
         public Material()
         {
             Colour = new Colour3();
+        }
+
+        public void CalculateSpecularColour()
+        {
+            SpecularColour = Colour * Specular;
         }
     }
 }
