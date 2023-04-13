@@ -314,13 +314,16 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
                         cor color */
 
                         color = color + hit.Material.Colour * hit.Material.Specular * TraceRay(reflectedRay, max_recursion - 1, i, j);
-                        
+                        /*
+                        Vector3 oneF = new Vector3(
+                            (float)hit.Material.Specular + (1.0f - (float)hit.Material.Specular) * (float)Math.Pow(1.0f - cosThetaV.X, 5.0),
+                            (float)hit.Material.Specular + (1.0f - (float)hit.Material.Specular) * (float)Math.Pow(1.0f - cosThetaV.Y, 5.0),
+                            (float)hit.Material.Specular + (1.0f - (float)hit.Material.Specular) * (float)Math.Pow(1.0f - cosThetaV.Z, 5.0));
                         // em alternativa, poderão recorrer à aproximação de Schlick
-                        //color = color + hit.Material.Colour * (hit.Material.Specular + (1.0 - hit.Material.Specular) * Math.Pow((1.0f - cosThetaV),5)) * TraceRay(reflectedRay, max_recursion - 1, i, j);
+                        color = color + hit.Material.Colour * (hit.Material.Specular + (1.0f - hit.Material.Specular) * oneF) * TraceRay(reflectedRay, max_recursion - 1, i, j);
+                    */
                     }
                 }
-
-                
 
                 return color / parsedContent.Lights.Count; /* em que sceneLights.length designa o número de 
                 fontes de luz existentes na cena; se houver intersecção, retorna a cor correspondente
