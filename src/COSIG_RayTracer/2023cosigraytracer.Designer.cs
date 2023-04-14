@@ -113,6 +113,7 @@ namespace COSIG_RayTracer
             this.recursionDepthSlider.Name = "recursionDepthSlider";
             this.recursionDepthSlider.Size = new System.Drawing.Size(102, 38);
             this.recursionDepthSlider.TabIndex = 4;
+            this.recursionDepthSlider.Text = "0";
             this.recursionDepthSlider.SelectedItemChanged += new System.EventHandler(this.recursionDepthSlider_SelectedItemChanged);
             // 
             // recursionDepth1

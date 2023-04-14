@@ -2,28 +2,20 @@
 using COSIG_RayTracing_Parser__ConsoleApp_;
 using COSIG_RayTracing_Parser__ConsoleApp_.Objects;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Numerics;
-using System.Reflection;
-using System.Runtime.ConstrainedExecution;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace COSIG_RayTracer
 {
     public partial class RayTracerWindow : Form
     {
         private bool isDebuggingRun = false;
+
+        private int chosenRecursivity = 0;
+
+        private int max_recursivity = 0;
 
         private Parser parsedContent = new Parser();
         private bool paintReady = false;
@@ -65,7 +57,6 @@ namespace COSIG_RayTracer
             Console.WriteLine("Result: " + result);
             Console.WriteLine("FilePath: " + openFileDialog.FileName);
 
-            //"C:/Users/emonteiro/OneDrive - Hitachi Solutions/Desktop/Mestrado ISEP/1ano/2semestre/COSIG/Test_Scene_1.txt";
             string filePath = openFileDialog.FileName;
             parsedContent = new Parser();
             parsedContent.LoadFile(filePath);
@@ -101,8 +92,8 @@ namespace COSIG_RayTracer
 
         private void startButton_Click(object sender, EventArgs e)
         {
-            int max_recursivity = 2;
-            //startPrimaryRays();
+            max_recursivity = chosenRecursivity;
+
             double fov_radians = parsedContent.Camera.Field_of_view * Math.PI / 180;
             double height = 2.0 * parsedContent.Camera.Distance * Math.Tan(fov_radians / 2.0);
             double width = height * parsedContent.Image.Res_horizontal / parsedContent.Image.Res_vertical;
@@ -124,12 +115,12 @@ namespace COSIG_RayTracer
 
                     // calculem as coordenadas P.x, P.y e P.z do centro do píxel[i][j]
 
-                    parsedContent.Image.Pixels[i, j].X = (float)((i + 0.5f) * pixelDimension - width / 2.0f);
+                    parsedContent.Image.Pixels[i, j].X = (float)((i + 0.5f) * pixelDimension - width / 2);
                     /* a origem do sistema de eixos coordenados está 
                     localizada no centro do plano de projecção, mas o píxel[0][0] está localizado no canto
                     superior esquerdo da imagem; daí a subtracção de width / 2.0 à coordenada x do píxel */
 
-                    parsedContent.Image.Pixels[i, j].Y = (float)(-(j + 0.5f) * pixelDimension + height / 2.0f); /* a origem do sistema de eixos coordenados está 
+                    parsedContent.Image.Pixels[i, j].Y = (float)(-(j + 0.5f) * pixelDimension + height / 2); /* a origem do sistema de eixos coordenados está 
                     localizada no centro do plano de projecção, mas o píxel[0][0] está localizado no canto
                     superior esquerdo da imagem; daí a adição de height / 2.0 à coordenada y do píxel */
 
@@ -140,8 +131,8 @@ namespace COSIG_RayTracer
                     que define a direcção do referido raio */
 
                     Vector3 direction = new Vector3(
-                        parsedContent.Image.Pixels[i, j].X - 0.0f,
-                        parsedContent.Image.Pixels[i, j].Y - 0.0f,
+                        parsedContent.Image.Pixels[i, j].X,
+                        parsedContent.Image.Pixels[i, j].Y,
                         parsedContent.Image.Pixels[i, j].Z - (float)parsedContent.Camera.Distance
                         ); // ou seja, direction = new Vector3(P.x, P.y, -distance);
 
@@ -209,9 +200,9 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
 
         private Colour3 TraceRay(Ray ray, int max_recursion)
         {
-            Hit hit = new Hit
+            Hit hit = new Hit()
             {
-                Tmin = double.MaxValue // usem um valor muito elevado. Por exemplo, hit.tmin = 1.0E12;
+                Tmin = float.MaxValue // usem um valor muito elevado. Por exemplo, hit.tmin = 1.0E12;
             };
             foreach (Object3D obj in parsedContent.GetAllObjects3D()) // ciclo para percorrer todos os objectos da cena
             {
@@ -233,7 +224,7 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
 
                     Vector3 l = transformedLightPoint3 - hit.Point;
 
-                    double tLight = l.Length();
+                    float tLight = l.Length();
 
                     // normalizem o vector l
                     l = Vector3.Normalize(l);
@@ -254,7 +245,7 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
                         Ray shadowRay = new Ray(transformedLightPoint3, -l);
                         Hit shadowHit = new Hit()
                         {
-                            Tmin = tLight - 1.0E-3 // a intersecção, se existir, terá de ocorrer aquém da posição da fonte de luz
+                            Tmin = tLight - 1.0E-3f // a intersecção, se existir, terá de ocorrer aquém da posição da fonte de luz
                         };
 
                         foreach (Object3D obj in parsedContent.GetAllObjects3D())
@@ -293,7 +284,6 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
 
                 if (max_recursion > 0)
                 {
-
                     // comecem por calcular o co-seno do ângulo do raio incidente
                     float cosThetaV = -Vector3.Dot(ray.Direction_Normalized, hit.Normal);
 
@@ -301,19 +291,19 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
                     { // o material constituinte do objecto intersectado reflecte a luz especular
 
                         // calculem a direcção do raio reflectido
-                        Vector3 r = (ray.Direction_Normalized + 2.0f * cosThetaV * hit.Normal);
+                        Vector3 r = ray.Direction_Normalized + 2.0f * cosThetaV * hit.Normal;
                         // normalizem o vector
                         r = Vector3.Normalize(r);
 
                         // construam o raio reflectido que tem origem no ponto de intersecção e a direcção do vector r
-                        Ray reflectedRay = new Ray(hit.Point + 1.0E-4f * hit.Normal, r);
+                        Ray reflectedRay = new Ray(hit.Point + 1.0E-2f * hit.Normal, r);
 
                         /* uma vez construído o raio, deverão invocar a função traceRay(), a qual irá acompanhar 
                         recursivamente o percurso do referido raio; quando regressar, a cor retornada por esta função
                         deverá ser usada para calcular a componente de reflexão especular, a qual será adicionada à
                         cor color */
 
-                        color += hit.Material.Colour * hit.Material.Specular * TraceRay(reflectedRay, max_recursion - 1);
+                        color += hit.Material.SpecularColour * TraceRay(reflectedRay, max_recursion - 1);
                         // em alternativa, poderão recorrer à aproximação de Schlick
                         //color += hit.Material.Colour * (hit.Material.Specular + (1.0 - hit.Material.Specular) * Math.Pow(1.0 - cosThetaV, 5)) * TraceRay(reflectedRay, max_recursion - 1);
                     }
@@ -323,26 +313,26 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
                         raio refractado, comecem por admitir que o raio luminoso está a transitar do
                         ar para o meio constituinte do objecto intersectado */
                         float eta = 1.0f / (float)hit.Material.Refractive_index;
-                        var cosThetaR = Math.Sqrt(1.0f - eta * eta * (1.0f - cosThetaV * cosThetaV));
+                        float cosThetaR = (float)Math.Sqrt(1.0f - eta * eta * (1.0f - cosThetaV * cosThetaV));
                         /* se o raio luminoso estiver a transitar do meio constituinte do objecto
                         intersectado para o ar, invertam a razão entre os índices de refracção e
                         troquem o sinal do co - seno do ângulo do raio refractado */
                         if (cosThetaV < 0.0f)
                         {
                             eta = (float)hit.Material.Refractive_index;
-                            cosThetaR = -cosThetaR;
+                            cosThetaR *= -1;
                         }
                         // calculem a direcção do raio refractado
                         Vector3 r = eta * ray.Direction_Normalized + (float)(eta * cosThetaV - cosThetaR) * hit.Normal;
                         // normalizem o vector
                         r = Vector3.Normalize(r);
                         // construam o raio refractado que tem origem no ponto de intersecção e a direcção do vector r
-                        Ray refractedRay = new Ray(hit.Point, r);
+                        Ray refractedRay = new Ray(hit.Point + 1.0E-2f * r, r);
                         /* uma vez construído o raio, deverão invocar a função traceRay(), a qual irá 
                         acompanhar recursivamente o percurso do referido raio; quando regressar, a
                         cor retornada por esta função deverá ser usada para calcular a componente
                         de refracção, a qual será adicionada à cor color */
-                        color += hit.Material.Colour * hit.Material.Refraction * TraceRay(refractedRay, max_recursion - 1);
+                        color += hit.Material.RefractionColour * TraceRay(refractedRay, max_recursion - 1);
                     }
                 }
                 return color / parsedContent.Lights.Count; /* em que sceneLights.length designa o número de 
@@ -373,8 +363,8 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
         }
 
         private void recursionDepthSlider_SelectedItemChanged(object sender, EventArgs e)
-        {
-
+        {            
+            chosenRecursivity = Int32.Parse(recursionDepthSlider.Text);
         }
 
         private void recursionDepth1_Click(object sender, EventArgs e)

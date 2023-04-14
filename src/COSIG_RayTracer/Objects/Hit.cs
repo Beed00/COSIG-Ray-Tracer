@@ -14,8 +14,8 @@ namespace COSIG_RayTracer.Objects
         public Material Material { get; set; }
         public Vector3 Point { get; set; }
         public Vector3 Normal { get; set; }
-        public double T { get; set; }
-        public double Tmin { get; set; }
+        public float T { get; set; }
+        public float Tmin { get; set; }
 
         public Hit()
         {

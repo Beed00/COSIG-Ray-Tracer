@@ -35,8 +35,8 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
 
         public override bool Intersect(Ray ray, Hit hit)
         {
-            Vector4 origin4 = Transformation.TransformVector4(Transformation.InvertedTransformationMatrix, new Vector4(ray.Origin.X, ray.Origin.Y, ray.Origin.Z, 1.0f));
-            Vector4 direction4 = Transformation.TransformVector4(Transformation.InvertedTransformationMatrix, new Vector4(ray.Direction_Normalized.X, ray.Direction_Normalized.Y, ray.Direction_Normalized.Z, 0.0f));
+            Vector4 origin4 = Transformation.TransformVector4(Transformation.InvertedTransformationMatrix, new Vector4(ray.Origin, 1.0f));
+            Vector4 direction4 = Transformation.TransformVector4(Transformation.InvertedTransformationMatrix, new Vector4(ray.Direction_Normalized, 0.0f));
             Ray invertTransformedRay = new Ray(
                 new Vector3(origin4.X / origin4.W, origin4.Y / origin4.W, origin4.Z / origin4.W),
                 new Vector3(direction4.X, direction4.Y, direction4.Z)
@@ -123,7 +123,14 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
             Vector3 v = P - ray.Origin;
 
             hit.T = v.Length();
-            if (hit.T > 1.0E-4 && hit.T < hit.Tmin)
+
+            float aux = (P - (ray.Origin + ray.Direction_Normalized)).Length();
+
+            if (aux > hit.T) return false;
+
+            hit.T = Math.Abs(hit.T);
+
+            if (hit.T > 1.0E-6f && hit.T < hit.Tmin)
             {
                 hit.Tmin = hit.T;
                 hit.Found = true;

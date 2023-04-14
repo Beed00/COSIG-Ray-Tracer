@@ -41,7 +41,10 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
                 {
                     vectors[i] = new Vector3((float)x, (float)y, (float)z);
                     addedVector[i] = true;
-                    if (i == 2) Normalized_normal = Vector3.Normalize(Vector3.Cross(vectors[1] - vectors[0], vectors[2] - vectors[0]));
+                    if (i == 2)
+                    {
+                        Normalized_normal = Vector3.Normalize(Vector3.Cross(vectors[1] - vectors[0], vectors[2] - vectors[0]));
+                    }
                     break;
                 }
             }
@@ -64,7 +67,7 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
                 vectors[0].Z - invertTransformedRay.Origin.Z, vectors[0].Z - vectors[2].Z, invertTransformedRay.Direction_Normalized.Z, 0,
                 0, 0, 0, 1);
             float B = matrix_AB.GetDeterminant() / A_Det;
-            if (B <= -1.0E-4f) return false;
+            if (B <= -1.0E-6f) return false;
 
             // Y
             Matrix4x4 matrix_AY = new Matrix4x4(
@@ -73,7 +76,7 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
                 vectors[0].Z - vectors[1].Z, vectors[0].Z - invertTransformedRay.Origin.Z, invertTransformedRay.Direction_Normalized.Z, 0,
                 0, 0, 0, 1);
             float Y = matrix_AY.GetDeterminant() / A_Det;
-            if (Y <= -1.0E-4f || B + Y >= (1.0f + 1.0E-4f)) return false;
+            if (Y <= -1.0E-6f || B + Y >= 1.0f + 1.0E-6f) return false;
 
             Vector3 P = vectors[0] + B * (vectors[1] - vectors[0]) + Y * (vectors[2] - vectors[0]);
             Vector4 P4 = Transformation.TransformVector4(transformation.TransformationMatrix, new Vector4(P, 1.0f));
@@ -84,8 +87,15 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
 
             Vector3 v = P - ray.Origin;
 
-            hit.T = (double)v.Length();
-            if (hit.T > 1.0E-4 && hit.T < hit.Tmin)
+            hit.T = v.Length();
+
+            float aux = (P - (ray.Origin + ray.Direction_Normalized)).Length();
+
+            if (aux > hit.T) return false;
+
+            hit.T = Math.Abs(hit.T);
+
+            if (hit.T > 1.0E-6f && hit.T < hit.Tmin)
             {
                 hit.Tmin = hit.T;
                 hit.Found = true;

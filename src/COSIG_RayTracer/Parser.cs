@@ -211,6 +211,13 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_
                     }
                 }
 
+                // Lights - T
+                foreach (Material material in Materials)
+                {
+                    material.CalculateSpecularColour();
+                    material.CalculateRefractionColour();
+                }
+
                 // camera - T
                 Camera.Transformation = Transformations[Camera.TransformationIndex];
                 Camera.Transformation.CalculateTransformationMatrix(new Matrix4x4(
@@ -259,7 +266,9 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_
         internal List<Object3D> GetAllObjects3D()
         {
             return TriangleMeshes.Cast<Object3D>()
-                .Concat(Spheres.Cast<Object3D>())
+                .Concat(
+                    Spheres.Cast<Object3D>()
+                    )
                 .Concat(Boxes.Cast<Object3D>())
                 .ToList();
 

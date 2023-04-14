@@ -35,8 +35,8 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
 
         public override bool Intersect(Ray ray, Hit hit)
         {
-            Vector4 origin4 = Transformation.TransformVector4(Transformation.InvertedTransformationMatrix, new Vector4(ray.Origin.X, ray.Origin.Y, ray.Origin.Z, 1.0f));
-            Vector4 direction4 = Transformation.TransformVector4(Transformation.InvertedTransformationMatrix, new Vector4(ray.Direction_Normalized.X, ray.Direction_Normalized.Y, ray.Direction_Normalized.Z, 0.0f));
+            Vector4 origin4 = Transformation.TransformVector4(Transformation.InvertedTransformationMatrix, new Vector4(ray.Origin, 1.0f));
+            Vector4 direction4 = Transformation.TransformVector4(Transformation.InvertedTransformationMatrix, new Vector4(ray.Direction_Normalized, 0.0f));
             Ray invertTransformedRay = new Ray(
                 new Vector3(origin4.X / origin4.W, origin4.Y / origin4.W, origin4.Z / origin4.W),
                 new Vector3(direction4.X, direction4.Y, direction4.Z)
@@ -139,9 +139,7 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
             normal = Vector3.Normalize(normal);
 
             Vector4 normal4 = Transformation.TransformVector4(Transformation.TransposedInvertedTransformationMatrix, new Vector4(normal, 0.0f));
-            normal = new Vector3(normal4.X, normal4.Y, normal4.Z);
-
-            normal = Vector3.Normalize(normal);
+            normal = Vector3.Normalize(new Vector3(normal4.X, normal4.Y, normal4.Z));
 
             Vector4 P4 = Transformation.TransformVector4(Transformation.TransformationMatrix, new Vector4(P, 1.0f));
             P = new Vector3(P4.X / P4.W, P4.Y / P4.W, P4.Z / P4.W);
@@ -149,7 +147,7 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
             Vector3 v = P - ray.Origin;
 
             hit.T = v.Length();
-            if (hit.T > 1.0E-6 && hit.T < hit.Tmin)
+            if (hit.T > 1.0E-6f && hit.T < hit.Tmin)
             {
                 hit.Tmin = hit.T;
                 hit.Found = true;
