@@ -1,10 +1,7 @@
 ﻿using COSIG_RayTracer.Objects;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
 {
