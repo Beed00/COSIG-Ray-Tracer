@@ -39,8 +39,7 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
             Vector4 direction4 = Transformation.TransformVector4(Transformation.InvertedTransformationMatrix, new Vector4(ray.Direction_Normalized, 0.0f));
             Ray invertTransformedRay = new Ray(
                 new Vector3(origin4.X / origin4.W, origin4.Y / origin4.W, origin4.Z / origin4.W),
-                new Vector3(direction4.X, direction4.Y, direction4.Z)
-                //Vector3.Normalize(new Vector3(direction4.X, direction4.Y, direction4.Z))
+                Vector3.Normalize(new Vector3(direction4.X, direction4.Y, direction4.Z))
                 );
 
             float t1, t2, taux;
@@ -126,6 +125,58 @@ namespace COSIG_RayTracing_Parser__ConsoleApp_.Objects
             //Get P of tnear
 
             Vector3 P = invertTransformedRay.Origin + (invertTransformedRay.Direction_Normalized * tnear);
+
+            float closest = P.X;
+            int closestIndex = 0;
+
+            if (Math.Abs(Math.Abs(P.Y) - 0.5f) < Math.Abs(Math.Abs(closest) - 0.5f))
+            {
+                closest = P.Y;
+                closestIndex = 1;
+            }
+            if (Math.Abs(Math.Abs(P.Z) - 0.5f) < Math.Abs(Math.Abs(closest) - 0.5f))
+            {
+                closest = P.Z;
+                closestIndex = 2;
+            }
+
+            if (closestIndex == 0)
+            {
+                if (closest > 0.0f)
+                {
+                    P = new Vector3(0.5f, P.Y, P.Z);
+                }
+                else
+                {
+                    P = new Vector3(-0.5f, P.Y, P.Z);
+                }
+
+            }
+            if (closestIndex == 1)
+            {
+                if (closest > 0.0f)
+                {
+                    P = new Vector3(P.X, 0.5f, P.Z);
+                }
+                else
+                {
+                    P = new Vector3(P.X, -0.5f, P.Z);
+                }
+
+            }
+            if (closestIndex == 2)
+            {
+                if (closest > 0.0f)
+                {
+                    P = new Vector3(P.X, P.Y, 0.5f);
+                }
+                else
+                {
+                    P = new Vector3(P.X, P.Y, -0.5f);
+                }
+
+            }
+
 
             // normal
             Vector3 normal =
