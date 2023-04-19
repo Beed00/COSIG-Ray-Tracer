@@ -52,8 +52,12 @@ namespace COSIG_RayTracer
                 {
                 }
             }
+            else
+            {
+                return;
+            }
 
-            elapsedTimeTimer.Start();
+            //elapsedTimeTimer.Start();
 
             Console.WriteLine("FileSize: " + size);
             Console.WriteLine("Result: " + result);
@@ -98,6 +102,9 @@ namespace COSIG_RayTracer
 
         private void startButton_Click(object sender, EventArgs e)
         {
+            progressBar.Value = 0;
+            progressBar.Visible = true;
+            
             max_recursivity = chosenRecursivity;
 
             double fov_radians = parsedContent.Camera.Field_of_view * Math.PI / 180;
@@ -194,15 +201,15 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
                     parsedContent.Image.Pixels_RGB[i, j, 2] = (int)(255.0 * colour.Blue);
                     //Console.WriteLine("Pixel " + i + "," + j + ": R_" + parsedContent.Image.Pixels_Red[i, j] + "G_" + parsedContent.Image.Pixels_Green[i, j] + "B_" + parsedContent.Image.Pixels_Blue[i, j]);
 
-                    // Progress Bar
-                    progressBar.Value = (j * parsedContent.Image.Res_horizontal + i + 1) * 100 / (parsedContent.Image.Res_vertical * parsedContent.Image.Res_horizontal);
                     //Console.WriteLine(j * parsedContent.Image.Res_horizontal + i + 1 + " of " + parsedContent.Image.Res_vertical * parsedContent.Image.Res_horizontal);
                 }
+                // Progress Bar
+                progressBar.Value = (j * 100) / parsedContent.Image.Res_vertical;
             }
             Console.WriteLine("Reached the End");
-            progressBar.Value = 100;
             paintReady = true;
             pictureBox1.Invalidate();
+            progressBar.Visible = false;
         }
 
         private Colour3 TraceRay(Ray ray, int max_recursion)
@@ -404,6 +411,8 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
                 }
                 pictureBox1.Image = flag;
                 saveButton.Enabled = true;
+
+                progressBar.Invalidate();
                 Console.WriteLine("All done");
             }
         }

@@ -148,7 +148,9 @@ namespace COSIG_RayTracer
             this.progressBar.Margin = new System.Windows.Forms.Padding(6);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(300, 45);
+            this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar.TabIndex = 8;
+            this.progressBar.Visible = false;
             this.progressBar.Click += new System.EventHandler(this.progressBar_Click);
             // 
             // elapsedTimeLabel
