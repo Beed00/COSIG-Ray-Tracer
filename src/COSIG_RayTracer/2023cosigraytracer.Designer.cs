@@ -62,6 +62,7 @@ namespace COSIG_RayTracer
             // saveButton
             // 
             this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.saveButton.Enabled = false;
             this.saveButton.Location = new System.Drawing.Point(100, 773);
             this.saveButton.Margin = new System.Windows.Forms.Padding(6);
             this.saveButton.Name = "saveButton";
@@ -69,10 +70,12 @@ namespace COSIG_RayTracer
             this.saveButton.TabIndex = 1;
             this.saveButton.Text = "Save Image";
             this.saveButton.UseVisualStyleBackColor = true;
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
             // startButton
             // 
             this.startButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.startButton.Enabled = false;
             this.startButton.Location = new System.Drawing.Point(1298, 676);
             this.startButton.Margin = new System.Windows.Forms.Padding(6);
             this.startButton.Name = "startButton";
@@ -158,6 +161,7 @@ namespace COSIG_RayTracer
             this.elapsedTimeLabel.Size = new System.Drawing.Size(203, 32);
             this.elapsedTimeLabel.TabIndex = 9;
             this.elapsedTimeLabel.Text = "Elapsed Time: ";
+            this.elapsedTimeLabel.Visible = false;
             this.elapsedTimeLabel.Click += new System.EventHandler(this.label1_Click);
             // 
             // elapsedTimeTimer

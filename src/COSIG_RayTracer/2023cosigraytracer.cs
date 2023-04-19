@@ -3,9 +3,11 @@ using COSIG_RayTracing_Parser__ConsoleApp_;
 using COSIG_RayTracing_Parser__ConsoleApp_.Objects;
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Numerics;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace COSIG_RayTracer
 {
@@ -58,9 +60,12 @@ namespace COSIG_RayTracer
             Console.WriteLine("FilePath: " + openFileDialog.FileName);
 
             string filePath = openFileDialog.FileName;
-            parsedContent = new Parser();
-            parsedContent.LoadFile(filePath);
 
+            paintReady = false;
+            parsedContent = new Parser();
+            startButton.Enabled = false;
+            parsedContent.LoadFile(filePath);
+            startButton.Enabled = true;
             if (isDebuggingRun)
             {
                 Tests.ParserTest(parsedContent.imageCount, parsedContent.Transformations, parsedContent.Camera,
@@ -78,6 +83,7 @@ namespace COSIG_RayTracer
 
         private void elapsedTimeTimer_Tick(object sender, EventArgs e)
         {
+            /*
             if (progressBar.Value < 100)
             {
                 timer++;
@@ -87,7 +93,7 @@ namespace COSIG_RayTracer
             {
                 elapsedTimeTimer.Stop();
                 timer = 0;
-            }
+            }*/
         }
 
         private void startButton_Click(object sender, EventArgs e)
@@ -194,6 +200,7 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
                 }
             }
             Console.WriteLine("Reached the End");
+            progressBar.Value = 100;
             paintReady = true;
             pictureBox1.Invalidate();
         }
@@ -363,7 +370,7 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
         }
 
         private void recursionDepthSlider_SelectedItemChanged(object sender, EventArgs e)
-        {            
+        {
             chosenRecursivity = Int32.Parse(recursionDepthSlider.Text);
         }
 
@@ -381,20 +388,33 @@ Limitação das componentes primárias(R, G e B) das cores obtidas
         {
             if (paintReady)
             {
-                Graphics g = e.Graphics;
-                float hStart = (pictureBox1.Width - parsedContent.Image.Res_horizontal) / 2;
-                float vStart = (pictureBox1.Height - parsedContent.Image.Res_vertical) / 2;
+                Bitmap flag = new Bitmap(parsedContent.Image.Res_horizontal, parsedContent.Image.Res_vertical);
+                Graphics flagGraphics = Graphics.FromImage(flag);
+                //Graphics g = e.Graphics;
+                //float hStart = (pictureBox1.Width - parsedContent.Image.Res_horizontal) / 2;
+                //float vStart = (pictureBox1.Height - parsedContent.Image.Res_vertical) / 2;
                 for (int i = 0; i < parsedContent.Image.Res_horizontal; i++)
                 {
                     for (int j = 0; j < parsedContent.Image.Res_vertical; j++)
                     {
                         Color c = Color.FromArgb(parsedContent.Image.Pixels_RGB[i, j, 0], parsedContent.Image.Pixels_RGB[i, j, 1], parsedContent.Image.Pixels_RGB[i, j, 2]);
                         SolidBrush brush = new SolidBrush(c);
-                        g.FillRectangle(brush, hStart + i, vStart + j, 1, 1);
+                        flagGraphics.FillRectangle(brush, i, j, 1, 1);
                     }
                 }
-
+                pictureBox1.Image = flag;
+                saveButton.Enabled = true;
                 Console.WriteLine("All done");
+            }
+        }
+
+        private void saveButton_Click(object sender, EventArgs e)
+        {
+            if (pictureBox1.Image != null)
+            {
+                SaveFileDialog dialog = new SaveFileDialog();
+                if (dialog.ShowDialog() == DialogResult.OK)
+                    pictureBox1.Image.Save(dialog.FileName + ".jpeg", ImageFormat.Jpeg);
             }
         }
     }
